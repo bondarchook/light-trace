@@ -1,4 +1,5 @@
 ﻿using RayTracer.UI;
+using RayTracer.UI;
 
 namespace RayTracer
 {
