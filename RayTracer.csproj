@@ -52,7 +52,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Context.cs" />
-    <Compile Include="Test.cs" />
     <Compile Include="UI\MainScreen.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -80,6 +79,7 @@
     <Compile Include="Transform.cs" />
     <Compile Include="UI\Level.cs" />
     <Compile Include="UI\ListBoxLog.cs" />
+    <Compile Include="UI\Test2.cs" />
     <Compile Include="Utils.cs" />
     <EmbeddedResource Include="UI\MainScreen.resx">
       <DependentUpon>MainScreen.cs</DependentUpon>
