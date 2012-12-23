@@ -79,7 +79,6 @@
     <Compile Include="Transform.cs" />
     <Compile Include="UI\Level.cs" />
     <Compile Include="UI\ListBoxLog.cs" />
-    <Compile Include="UI\Test5.cs" />
     <Compile Include="Utils.cs" />
     <EmbeddedResource Include="UI\MainScreen.resx">
       <DependentUpon>MainScreen.cs</DependentUpon>
@@ -104,6 +103,12 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\LightTrace.ColladaReader\LightTrace.ColladaReader.csproj">
+      <Project>{0DAF045C-8A8E-4ECF-A8C4-D69ED59575E1}</Project>
+      <Name>LightTrace.ColladaReader</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

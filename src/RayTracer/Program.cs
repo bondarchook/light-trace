@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
+using LightTrace.ColladaReader;
 using RayTracer.UI;
 
 namespace RayTracer
@@ -12,6 +13,9 @@ namespace RayTracer
         [STAThread]
         private static void Main()
         {
+			ColladaSceneReader reader = new ColladaSceneReader();
+			reader.Load(@"d:\tmp\s1.dae");
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new MainForm());
