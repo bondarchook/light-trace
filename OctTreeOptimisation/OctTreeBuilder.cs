@@ -86,13 +86,6 @@ namespace RayTracer.OctTreeOptimisation
                     }
                 }
             }
-
-            if (node.Nodes.Any())
-            {
-                var geomertries = node.Nodes.SelectMany(n => n.Objects != null ? n.Objects : new List<Geomertry>()).Distinct().ToList();
-                List<Geomertry> enumerable = node.Objects.Where(o => !geomertries.Contains(o)).ToList();
-                var count = enumerable.Count;
-            }
             node.Objects = null;
         }
 
