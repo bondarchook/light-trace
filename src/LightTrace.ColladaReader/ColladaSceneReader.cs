@@ -7,7 +7,6 @@ using System.Xml.XPath;
 using LightTrace.Domain;
 using LightTrace.Domain.Nodes;
 using Microsoft.Xna.Framework;
-using RayTracer;
 
 namespace LightTrace.ColladaReader
 {
@@ -107,8 +106,10 @@ namespace LightTrace.ColladaReader
 				texcoord = ReadMeshData(meshElement, texcoordSourceId);
 			}
 
-			int[] vcounts = polylistElement.Element(Ns + "vcount").Value.ToIntArray();
+			int[] vertexCounts = polylistElement.Element(Ns + "vcount").Value.ToIntArray();
 			int[] poligonIndexes = polylistElement.Element(Ns + "p").Value.ToIntArray();
+
+			mesh.BuildMesh(vertexCounts, poligonIndexes, vertices, normals, texcoord);
 		}
 
 		private float[] ReadMeshData(XElement meshElement, string sourceId)

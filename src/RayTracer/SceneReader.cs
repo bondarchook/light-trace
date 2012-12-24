@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using LightTrace.Domain;
 using Microsoft.Xna.Framework;
 using RayTracer.GeomertryPrimitives;
 

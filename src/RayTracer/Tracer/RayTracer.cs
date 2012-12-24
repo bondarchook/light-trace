@@ -1,4 +1,5 @@
 ﻿using System;
+using LightTrace.Domain;
 using Microsoft.Xna.Framework;
 using RayTracer.GeomertryPrimitives;
 

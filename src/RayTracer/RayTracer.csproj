@@ -58,13 +58,8 @@
     <Compile Include="UI\MainScreen.Designer.cs">
       <DependentUpon>MainScreen.cs</DependentUpon>
     </Compile>
-    <Compile Include="GeomertryPrimitives\Geomertry.cs" />
-    <Compile Include="GeomertryPrimitives\Sphere.cs" />
-    <Compile Include="GeomertryPrimitives\Triangle.cs" />
-    <Compile Include="Global.cs" />
     <Compile Include="Light.cs" />
     <Compile Include="LightType.cs" />
-    <Compile Include="Material.cs" />
     <Compile Include="OctTreeOptimisation\Node.cs" />
     <Compile Include="OctTreeOptimisation\OctTree.cs" />
     <Compile Include="OctTreeOptimisation\OctTreeBuilder.cs" />
@@ -73,13 +68,12 @@
     <Compile Include="Renderer.cs" />
     <Compile Include="SceneReader.cs" />
     <Compile Include="Scene.cs" />
-    <Compile Include="Tracer\IntersectionInfo.cs" />
-    <Compile Include="Tracer\Ray4.cs" />
     <Compile Include="Tracer\RayTracer.cs" />
-    <Compile Include="Transform.cs" />
     <Compile Include="UI\Level.cs" />
     <Compile Include="UI\ListBoxLog.cs" />
-    <Compile Include="Utils.cs" />
+    <Compile Include="Utils.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <EmbeddedResource Include="UI\MainScreen.resx">
       <DependentUpon>MainScreen.cs</DependentUpon>
     </EmbeddedResource>
@@ -108,6 +102,10 @@
     <ProjectReference Include="..\LightTrace.ColladaReader\LightTrace.ColladaReader.csproj">
       <Project>{0DAF045C-8A8E-4ECF-A8C4-D69ED59575E1}</Project>
       <Name>LightTrace.ColladaReader</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LightTrace.Domain\LightTrace.Domain.csproj">
+      <Project>{E08A5584-C8D0-47B0-A7BA-62F40582E4EE}</Project>
+      <Name>LightTrace.Domain</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -1,9 +1,9 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 
-namespace RayTracer
+namespace LightTrace.Domain
 {
-    public class Transform
+    public static class Transform
     {
         public static Matrix LookAt(Vector3 eye, Vector3 center, Vector3 up)
         {

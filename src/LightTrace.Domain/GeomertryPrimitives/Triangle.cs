@@ -1,4 +1,5 @@
 using System;
+using LightTrace.Domain;
 using Microsoft.Xna.Framework;
 using RayTracer.Tracer;
 
@@ -17,12 +18,19 @@ namespace RayTracer.GeomertryPrimitives
             C = c;
         }
 
-        public Vector3 A { get; set; }
-        public Vector3 B { get; set; }
-        public Vector3 C { get; set; }
-        public Vector3? Na { get; set; }
-        public Vector3? Nb { get; set; }
-        public Vector3? Nc { get; set; }
+    	public Vector3 A;
+    	public Vector3 B;
+    	public Vector3 C;
+
+		//Normals
+		public Vector3? Na;
+    	public Vector3? Nb;
+    	public Vector3? Nc;
+
+		//Texture coordinates
+		public Vector2? Ta;
+    	public Vector2? Tb;
+    	public Vector2? Tc;
 
         public override IntersectionInfo Intersect(Ray ray)
         {
@@ -87,6 +95,11 @@ namespace RayTracer.GeomertryPrimitives
         private bool UseNormals()
         {
             return Na.HasValue && Nb.HasValue && Nc.HasValue;
+        }
+
+		private bool UseTexture()
+        {
+            return Ta.HasValue && Tb.HasValue && Tc.HasValue;
         }
     }
 }
