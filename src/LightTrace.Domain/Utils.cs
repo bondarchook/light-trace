@@ -38,12 +38,17 @@ namespace LightTrace.Domain
 
 		public static Vector3 ToVec3(this float[] array, int offset)
 		{
-			return new Vector3(array[offset], array[offset + 1], array[offset + 2]);
+			return new Vector3(array[offset*3], array[offset*3 + 1], array[offset*3 + 2]);
 		}
 
 		public static Vector2 ToVec2(this float[] array, int offset)
 		{
-			return new Vector2(array[offset], array[offset + 1]);
+			return new Vector2(array[offset*2], array[offset*2 + 1]);
+		}
+
+		public static Vector3 SwapAxis(this Vector3 vector)
+		{
+			return new Vector3(vector.X, vector.Z, vector.Y);
 		}
 	}
 }

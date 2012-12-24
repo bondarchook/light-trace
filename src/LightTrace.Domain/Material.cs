@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 
-namespace RayTracer
+namespace LightTrace.Domain
 {
     public class Material : ICloneable
     {

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using LightTrace.Domain;
 using Microsoft.Xna.Framework;
 using RayTracer.GeomertryPrimitives;
 using RayTracer.OctTreeOptimisation;

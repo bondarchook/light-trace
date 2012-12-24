@@ -52,6 +52,11 @@ namespace LightTrace.ColladaReader
 			return new Vector3(tokens.ToFloat(offset), tokens.ToFloat(offset + 1), tokens.ToFloat(offset + 2));
 		}
 
+		public static Vector3 SwapAxis(this Vector3 vector)
+		{
+			return new Vector3(vector.X,vector.Z,vector.Y);
+		}
+
 		public static int[] ToIntArray(this string str)
 		{
 			string[] tokens = str.Split(' ').Where(t => !string.IsNullOrEmpty(t)).ToArray();

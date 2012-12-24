@@ -50,9 +50,10 @@
     <Compile Include="Nodes\Camera.cs" />
     <Compile Include="Nodes\DirectionalLight.cs" />
     <Compile Include="Nodes\MeshGeometry.cs" />
-    <Compile Include="Nodes\Ligth.cs" />
+    <Compile Include="Nodes\Light.cs" />
     <Compile Include="Nodes\Node.cs" />
     <Compile Include="Nodes\PointLight.cs" />
+    <Compile Include="Nodes\TargetedCamera.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Ray4.cs" />
     <Compile Include="Scene.cs" />

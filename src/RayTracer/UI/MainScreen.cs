@@ -3,6 +3,7 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using LightTrace.ColladaReader;
 
 namespace RayTracer.UI
 {
@@ -31,28 +32,29 @@ namespace RayTracer.UI
             Context.Instance.Loger = new ListBoxLog(LogListBox);
 
 
-            SceneReader reader = new SceneReader();
+//            SceneReader reader = new SceneReader();
 //			Scene scene = reader.LoadScene(@"g:\X-Files\Dropbox\Dropbox\3D_course\hw3-submissionscenes.a13d1de57b76\hw3-submissionscenes\test.test");
 //			Scene scene = reader.LoadScene(@"g:\X-Files\Dropbox\Dropbox\3D_course\hw3-submissionscenes.a13d1de57b76\hw3-submissionscenes\scene4-specular.test");
 //            Scene scene = reader.LoadScene(@"g:\X-Files\Dropbox\Dropbox\3D_course\hw3-submissionscenes.a13d1de57b76\hw3-submissionscenes\scene6.test");
-            Scene scene = reader.LoadScene(@"d:\tmp\scene7.test");
+//            Scene scene = reader.LoadScene(@"d:\tmp\scene7.test");
 
 //			scene.Width = 160;
 //			scene.Height = 120;
 //			scene.Fov = 55;
 //			scene.MaxDepth = 0;
-            Scene scene1 = new Scene();
-            scene1.InitDefaultScene();
+
+			ColladaSceneReader reader2 = new ColladaSceneReader();
+	 		LightTrace.Domain.Scene scene =  reader2.Load(@"d:\tmp\s2.dae");
 
             _renderer = new Renderer(pictureBox, scene);
         }
 
         private void SaveButton_Click(object sender, EventArgs e)
         {
-            string fileName = Path.GetFileNameWithoutExtension(_renderer.Scene.OutputFileName);
-            string path = @"G:\X-Files\Dropbox\Dropbox\3D_course\hw3-submissionscenes.a13d1de57b76\hw3-submissionscenes\out\";
-//			string path = @"d:\tmp\";
-            pictureBox.Image.Save(Path.Combine(path, fileName + ".png"), ImageFormat.Png);
+//            string fileName = Path.GetFileNameWithoutExtension(_renderer.Scene.OutputFileName);
+//            string path = @"G:\X-Files\Dropbox\Dropbox\3D_course\hw3-submissionscenes.a13d1de57b76\hw3-submissionscenes\out\";
+////			string path = @"d:\tmp\";
+//            pictureBox.Image.Save(Path.Combine(path, fileName + ".png"), ImageFormat.Png);
         }
     }
 }

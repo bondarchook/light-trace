@@ -18,7 +18,7 @@ namespace LightTrace.ColladaReader
 		private XDocument _document;
 		private Scene _scene;
 
-		public void Load(string path)
+		public Scene Load(string path)
 		{
 			if (!File.Exists(path))
 				throw new IOException(string.Format("File '{0}' not found", path));
@@ -29,6 +29,8 @@ namespace LightTrace.ColladaReader
 			_nsMgr.AddNamespace("c", _document.Root.GetDefaultNamespace().NamespaceName);
 
 			LoadScene();
+
+			return _scene;
 		}
 
 		private void LoadScene()
@@ -62,7 +64,7 @@ namespace LightTrace.ColladaReader
 						}
 					case "instance_light":
 						{
-							Ligth light = ReadLight(instanceUrl);
+							Light light = ReadLight(instanceUrl);
 
 							ReadNodeInfo(light, nodeElement);
 							ReadNodeTransform(light, nodeElement);
@@ -120,7 +122,7 @@ namespace LightTrace.ColladaReader
 			return arrayElement.Value.ToFloatArray();
 		}
 
-		private Ligth ReadLight(string url)
+		private Light ReadLight(string url)
 		{
 			XElement instanceElement = _document.XPathSelectElement(string.Format("//c:library_lights/c:light[@id='{0}']", url), _nsMgr);
 			XElement lightElement = instanceElement.XPathSelectElement("c:technique_common/node()", _nsMgr);
@@ -178,9 +180,10 @@ namespace LightTrace.ColladaReader
 			{
 				Vector3 rot = rotationElement.Value.ToVec3();
 				float angle = rotationElement.Value.ToFloat(3);
+
 				rotation = Transform.Rotate(angle, rot)*rotation;
 			}
-			node.Ratation = rotation;
+			node.Rotation = rotation;
 
 			Vector3 scale = nodeElement.Element(Ns + "scale").Value.ToVec3();
 			node.Scale = Matrix.CreateScale(scale);

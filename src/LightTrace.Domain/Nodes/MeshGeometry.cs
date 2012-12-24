@@ -35,9 +35,9 @@ namespace LightTrace.Domain.Nodes
 
 				int normalOffset = polygonOffset + 1;
 
-				triangle.Na = normals.ToVec3(poligonIndexes[normalOffset]);
-				triangle.Nb = normals.ToVec3(poligonIndexes[normalOffset + vertexBOffset]);
-				triangle.Nc = normals.ToVec3(poligonIndexes[normalOffset + vertexCOffset]);
+				triangle.Na = normals.ToVec3(poligonIndexes[normalOffset]).SwapAxis();
+				triangle.Nb = normals.ToVec3(poligonIndexes[normalOffset + vertexBOffset]).SwapAxis();
+				triangle.Nc = normals.ToVec3(poligonIndexes[normalOffset + vertexCOffset]).SwapAxis();
 
 				if (texcoord != null)
 				{
