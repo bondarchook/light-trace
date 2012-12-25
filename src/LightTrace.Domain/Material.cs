@@ -7,9 +7,11 @@ namespace LightTrace.Domain
     {
         public Vector3 DiffuseColor { get; set; }
         public Vector3 SpecularColor { get; set; }
+		public Vector3 ReflectiveColor { get; set; }
         public Vector3 EmissionColor { get; set; }
         public Vector3 AmbientColor { get; set; }
         public float Shininess { get; set; }
+		public float Reflectivity { get; set; }
 
         public Material()
         {

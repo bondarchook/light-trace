@@ -19,11 +19,13 @@ namespace LightTrace.Domain
 		public Camera Camera;
 
 		public int MaxDepth;
+		public Vector3 EnvironmentColor;
 
 		public Scene()
 		{
 			Nodes = new List<Node>();
 			MaxDepth = 5;
+			EnvironmentColor = new Vector3(0.1f);
 		}
 
 		public void PrepareScene()
@@ -37,17 +39,12 @@ namespace LightTrace.Domain
 			Lights = Nodes.OfType<Light>().ToList();
 			Triangles = new List<Triangle>();
 
-			Random random = new Random();
 
 			foreach (var geometry in Nodes.OfType<MeshGeometry>())
 			{
 				foreach (var triangle in geometry.Triangles)
 				{
-					Material material = new Material();
-					material.AmbientColor = new Vector3((float) (random.NextDouble()*0.7 + 0.2), (float) (random.NextDouble()*0.7 + 0.2), (float) (random.NextDouble()*0.7 + 0.2));
-
-					triangle.Material = material;
-					triangle.Transform = geometry.Translation*geometry.Rotation;
+					triangle.Transform = geometry.Scale*geometry.Rotation * geometry.Translation;
 
 					Triangles.Add(triangle);
 				}

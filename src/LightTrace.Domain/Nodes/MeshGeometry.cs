@@ -8,8 +8,9 @@ namespace LightTrace.Domain.Nodes
 	public class MeshGeometry : Node
 	{
 		public IList<Triangle> Triangles;
+		public Material Material;
 
-		public void BuildMesh(int[] vertexCounts, int[] poligonIndexes, float[] vertices, float[] normals, float[] texcoord)
+		public void BuildMesh(int[] vertexCounts, int[] poligonIndexes, float[] vertices, float[] normals, float[] texcoord, Material material)
 		{
 			//Only tiangles supported for now
 			if (!vertexCounts.All(c => c == 3))
@@ -23,6 +24,7 @@ namespace LightTrace.Domain.Nodes
 			for (int i = 0; i < poligonCount; i++)
 			{
 				Triangle triangle = new Triangle();
+				triangle.Material = material;
 
 				int polygonOffset = i*vertexCounts[i]*poligonComponentsCount;
 
@@ -35,9 +37,9 @@ namespace LightTrace.Domain.Nodes
 
 				int normalOffset = polygonOffset + 1;
 
-				triangle.Na = normals.ToVec3(poligonIndexes[normalOffset]).SwapAxis();
-				triangle.Nb = normals.ToVec3(poligonIndexes[normalOffset + vertexBOffset]).SwapAxis();
-				triangle.Nc = normals.ToVec3(poligonIndexes[normalOffset + vertexCOffset]).SwapAxis();
+				triangle.Na = normals.ToVec3(poligonIndexes[normalOffset]);
+				triangle.Nb = normals.ToVec3(poligonIndexes[normalOffset + vertexBOffset]);
+				triangle.Nc = normals.ToVec3(poligonIndexes[normalOffset + vertexCOffset]);
 
 				if (texcoord != null)
 				{

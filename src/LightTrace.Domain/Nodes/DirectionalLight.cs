@@ -8,7 +8,7 @@ namespace LightTrace.Domain.Nodes
 		{
 			attenuation = 1.0f;
 			distance = 0;
-			direction = Vector3.Normalize(Rotation.Forward);
+			direction = Vector3.Normalize(Rotation.Backward);
 		}
 	}
 }

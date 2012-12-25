@@ -85,14 +85,47 @@ namespace LightTrace.ColladaReader
 			}
 		}
 
+		private Material ReadMaterial(string id)
+		{
+			XElement instanceElement = _document.XPathSelectElement(string.Format("//c:library_materials/c:material[@id='{0}']/c:instance_effect", id), _nsMgr);
+			string effectId = instanceElement.Attribute("url").Value.Substring(1);
+
+			XElement effectInstanceElement = _document.XPathSelectElement(string.Format("//c:library_effects/c:effect[@id='{0}']", effectId), _nsMgr);
+			XElement effectElement = effectInstanceElement.XPathSelectElement("c:profile_COMMON/c:technique[@sid='common']/c:phong", _nsMgr);
+
+			Material material = new Material();
+
+			material.EmissionColor = ReadColor(effectElement, "c:emission/c:color");
+			material.AmbientColor = ReadColor(effectElement, "c:ambient/c:color");
+			material.DiffuseColor = ReadColor(effectElement, "c:diffuse/c:color");
+			material.SpecularColor = ReadColor(effectElement, "c:specular/c:color");
+			material.ReflectiveColor = ReadColor(effectElement, "c:reflective/c:color");
+
+			material.Shininess = ReadFloat(effectElement, "c:shininess/c:float");
+			material.Reflectivity = ReadFloat(effectElement, "c:reflectivity/c:float");
+
+			return material;
+		}
+
+		private Vector3 ReadColor(XElement effectElement, string xpath)
+		{
+			XElement colorElement = effectElement.XPathSelectElement(xpath, _nsMgr);
+			return colorElement == null ? Vector3.Zero : colorElement.Value.ToVec3();
+		}
+
+		private float ReadFloat(XElement effectElement, string xpath)
+		{
+			XElement floatElement = effectElement.XPathSelectElement(xpath, _nsMgr);
+			return floatElement == null ? 0 : floatElement.Value.ToFloat();
+		}
+
+
 		private void ReadMesh(MeshGeometry mesh, string url)
 		{
 			XElement instanceElement = _document.XPathSelectElement(string.Format("//c:library_geometries/c:geometry[@id='{0}']", url), _nsMgr);
 			XElement meshElement = instanceElement.XPathSelectElement("c:mesh", _nsMgr);
 
 			XElement polylistElement = meshElement.Element(Ns + "polylist");
-			string materialId = polylistElement.GetAttributeValue("material", false);
-			int polygonCount = polylistElement.GetMandatoryAttributeIntValue("count");
 
 			string verticesSourceId = meshElement.XPathSelectElement("c:vertices/c:input", _nsMgr).Attribute("source").Value.Substring(1);
 			string normalsSourceId = polylistElement.XPathSelectElement("c:input[@semantic='NORMAL']", _nsMgr).Attribute("source").Value.Substring(1);
@@ -111,7 +144,10 @@ namespace LightTrace.ColladaReader
 			int[] vertexCounts = polylistElement.Element(Ns + "vcount").Value.ToIntArray();
 			int[] poligonIndexes = polylistElement.Element(Ns + "p").Value.ToIntArray();
 
-			mesh.BuildMesh(vertexCounts, poligonIndexes, vertices, normals, texcoord);
+			string materialId = polylistElement.GetAttributeValue("material", false);
+			Material material = ReadMaterial(materialId);
+
+			mesh.BuildMesh(vertexCounts, poligonIndexes, vertices, normals, texcoord, material);
 		}
 
 		private float[] ReadMeshData(XElement meshElement, string sourceId)

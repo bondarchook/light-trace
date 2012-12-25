@@ -24,7 +24,7 @@ namespace RayTracer.Tracer
 
 		private Vector3 TraceRay(Ray ray, int depth)
 		{
-			Vector3 finalColor = Vector3.Zero;
+			Vector3 finalColor = _scene.EnvironmentColor;
 
 			if (depth > _scene.MaxDepth)
 			{
@@ -32,39 +32,38 @@ namespace RayTracer.Tracer
 			}
 
 			float minDist = Single.MaxValue;
-			IntersectionInfo minIntInfo = null;
+			IntersectionInfo intersection = null;
 
 			foreach (Geomertry geomertry in _scene.GetObjects(ray))
 			{
-				IntersectionInfo intersectionInfo = geomertry.Intersect(ray);
+				IntersectionInfo currentIntersection = geomertry.Intersect(ray);
 
-				if (intersectionInfo != null && minDist > intersectionInfo.Distance)
+				if (currentIntersection != null && minDist > currentIntersection.Distance)
 				{
-					minDist = intersectionInfo.Distance;
-					minIntInfo = intersectionInfo;
+					minDist = currentIntersection.Distance;
+					intersection = currentIntersection;
 				}
 			}
 
-			if (minIntInfo != null)
+			if (intersection != null)
 			{
-				Vector3 surfaceColor = CalculateSurfaceColor(minIntInfo, ray);
+				Vector3 surfaceColor = CalculateSurfaceColor(intersection, ray);
 
-				return surfaceColor;
-
-				Vector3 specularColor = minIntInfo.Geomertry.Material.SpecularColor;
+				Material material = intersection.Geomertry.Material;
+				Vector3 reflectiveColor = material.ReflectiveColor * material.Reflectivity;
 				Vector3 reflectedColor = Vector3.Zero;
 
-				float dot = Vector3.Dot(ray.Direction, minIntInfo.Normal);
+				// Backface culling. Do not reflect from back side of triangle
+				float dot = Vector3.Dot(ray.Direction, intersection.Normal);
 				if (dot <= 0)
 				{
-					Vector3 reflectDirection = Vector3.Reflect(ray.Direction, minIntInfo.Normal);
-
-					if (specularColor.X > 0 || specularColor.Y > 0 || specularColor.Z > 0)
+					if (reflectiveColor.X > 0 || reflectiveColor.Y > 0 || reflectiveColor.Z > 0)
 					{
-						reflectedColor = TraceRay(ShiftRay(minIntInfo.IntersectionPoint, reflectDirection), depth + 1);
+						Vector3 reflectDirection = Vector3.Reflect(ray.Direction, intersection.Normal);
+						reflectedColor = TraceRay(ShiftRay(intersection.IntersectionPoint, reflectDirection), depth + 1);
 					}
 
-					finalColor = surfaceColor + specularColor*reflectedColor;
+					finalColor = surfaceColor + reflectiveColor*reflectedColor;
 				}
 				else
 				{
@@ -76,8 +75,6 @@ namespace RayTracer.Tracer
 
 		private Vector3 CalculateSurfaceColor(IntersectionInfo intersectionInfo, Ray ray)
 		{
-			Vector3 eyepos = ray.Position;
-
 			Material material = intersectionInfo.Geomertry.Material;
 			Vector3 diffuseColor = material.DiffuseColor;
 			Vector3 specularColor = material.SpecularColor;
@@ -89,8 +86,7 @@ namespace RayTracer.Tracer
 			Vector3 lambert = Vector3.Zero;
 			Vector3 specular = Vector3.Zero;
 
-			return ambientColor;
-
+			Vector3 eyepos = ray.Position;
 			Vector3 point = intersectionInfo.IntersectionPoint;
 
 			Vector3 eyeDirection = eyepos - point;
