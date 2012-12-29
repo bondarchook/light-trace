@@ -1,8 +1,8 @@
 using System.Collections.Generic;
+using LightTrace.Domain.GeomertryPrimitives;
 using Microsoft.Xna.Framework;
-using RayTracer.GeomertryPrimitives;
 
-namespace RayTracer.OctTreeOptimisation
+namespace LightTrace.Domain.OctTreeOptimisation
 {
     public class Node
     {

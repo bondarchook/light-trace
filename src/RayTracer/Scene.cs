@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using LightTrace.Domain;
+using LightTrace.Domain.GeomertryPrimitives;
+using LightTrace.Domain.OctTreeOptimisation;
 using Microsoft.Xna.Framework;
-using RayTracer.GeomertryPrimitives;
-using RayTracer.OctTreeOptimisation;
 
 namespace RayTracer
 {

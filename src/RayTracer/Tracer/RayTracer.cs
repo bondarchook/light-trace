@@ -1,8 +1,9 @@
 ﻿using System;
+using System.Linq;
 using LightTrace.Domain;
+using LightTrace.Domain.GeomertryPrimitives;
 using LightTrace.Domain.Nodes;
 using Microsoft.Xna.Framework;
-using RayTracer.GeomertryPrimitives;
 
 namespace RayTracer.Tracer
 {
@@ -33,6 +34,13 @@ namespace RayTracer.Tracer
 
 			float minDist = Single.MaxValue;
 			IntersectionInfo intersection = null;
+
+			int count = _scene.GetObjects(ray).Count();
+			int totalCount = _scene.Triangles.Count;
+
+			double d = count/(double) totalCount;
+
+			return new Vector3((float) d*200);
 
 			foreach (Geomertry geomertry in _scene.GetObjects(ray))
 			{

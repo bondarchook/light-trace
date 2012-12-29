@@ -2,21 +2,21 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.Remoting.Contexts;
+using LightTrace.Domain.GeomertryPrimitives;
 using Microsoft.Xna.Framework;
-using RayTracer.GeomertryPrimitives;
-using RayTracer.UI;
 
-namespace RayTracer.OctTreeOptimisation
+namespace LightTrace.Domain.OctTreeOptimisation
 {
     public class OctTreeBuilder
     {
         private int _minObjectsInCube = 5;
         private int _maxDepth = 3;
-        private readonly ILoger _loger;
+//        private readonly ILoger _loger;
 
         public OctTreeBuilder()
         {
-            _loger = Context.Instance.Loger;
+//            _loger = Context.Instance.Loger;
         }
 
         public OctTree Build(IList<Geomertry> objects, int maxDepth, int minObjectsInCube)
@@ -41,7 +41,7 @@ namespace RayTracer.OctTreeOptimisation
 
             Devide(root, 0);
 
-            _loger.Log(Level.Info, string.Format("Oct tree build time: {0} ms", stopwatch.ElapsedMilliseconds));
+//            _loger.Log(Level.Info, string.Format("Oct tree build time: {0} ms", stopwatch.ElapsedMilliseconds));
 
             return new OctTree(root);
         }

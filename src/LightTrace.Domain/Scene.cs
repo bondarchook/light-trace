@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using LightTrace.Domain.GeomertryPrimitives;
 using LightTrace.Domain.Nodes;
 using System.Linq;
+using LightTrace.Domain.OctTreeOptimisation;
 using Microsoft.Xna.Framework;
 using RayTracer;
-using RayTracer.GeomertryPrimitives;
+using Node = LightTrace.Domain.Nodes.Node;
 
 namespace LightTrace.Domain
 {
@@ -14,17 +16,20 @@ namespace LightTrace.Domain
 		public string Name;
 		public IList<Node> Nodes;
 		public IList<Light> Lights;
-		public IList<Triangle> Triangles;
+		public IList<Geomertry> Triangles;
 
 		public Camera Camera;
 
 		public int MaxDepth;
 		public Vector3 EnvironmentColor;
+		
+		private OctTree _tree;
+		private bool _useOctTree = true;
 
 		public Scene()
 		{
 			Nodes = new List<Node>();
-			MaxDepth = 5;
+			MaxDepth = 1;
 			EnvironmentColor = new Vector3(0.1f);
 		}
 
@@ -37,7 +42,7 @@ namespace LightTrace.Domain
 			Camera.PrepareCamera();
 
 			Lights = Nodes.OfType<Light>().ToList();
-			Triangles = new List<Triangle>();
+			Triangles = new List<Geomertry>();
 
 
 			foreach (var geometry in Nodes.OfType<MeshGeometry>())
@@ -50,11 +55,25 @@ namespace LightTrace.Domain
 				}
 			}
 
+			OctTreeBuilder builder = new OctTreeBuilder();
+			if (_useOctTree && Triangles.Any())
+			{
+				_tree = builder.Build(Triangles, 7, 10);
+			}
+
 		}
 
 		public IEnumerable<Geomertry> GetObjects(Ray ray)
 		{
-			return Triangles;
+			if (_useOctTree)
+			{
+				IEnumerable<Geomertry> triangles = _tree.GetPotencialObjects(ray);
+				return triangles;
+			}
+			else
+			{
+				return Triangles;
+			}
 		}
 	}
 }

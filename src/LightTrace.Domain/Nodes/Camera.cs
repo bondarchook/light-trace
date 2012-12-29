@@ -19,13 +19,12 @@ namespace LightTrace.Domain.Nodes
 
 		public Camera()
 		{
-			Width = 400;
-			Height = 200;
+			Width = 700;
+			Height = 450;
 		}
 
 		public virtual void PrepareCamera()
 		{
-//			AspectRatio = Width/(double) Height;
 			AspectRatio = Height/(double) Width;
 			_halfWidth = Width/2.0;
 			_halfHeight = Height/2.0;

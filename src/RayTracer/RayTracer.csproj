@@ -60,9 +60,6 @@
     </Compile>
     <Compile Include="Light.cs" />
     <Compile Include="LightType.cs" />
-    <Compile Include="OctTreeOptimisation\Node.cs" />
-    <Compile Include="OctTreeOptimisation\OctTree.cs" />
-    <Compile Include="OctTreeOptimisation\OctTreeBuilder.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Renderer.cs" />

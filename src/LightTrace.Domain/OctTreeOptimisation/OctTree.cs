@@ -2,10 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using LightTrace.Domain.GeomertryPrimitives;
 using Microsoft.Xna.Framework;
-using RayTracer.GeomertryPrimitives;
 
-namespace RayTracer.OctTreeOptimisation
+namespace LightTrace.Domain.OctTreeOptimisation
 {
     public class OctTree
     {

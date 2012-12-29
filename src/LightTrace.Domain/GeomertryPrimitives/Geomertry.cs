@@ -1,8 +1,7 @@
-﻿using LightTrace.Domain;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using RayTracer.Tracer;
 
-namespace RayTracer.GeomertryPrimitives
+namespace LightTrace.Domain.GeomertryPrimitives
 {
     public abstract class Geomertry
     {

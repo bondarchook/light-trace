@@ -1,9 +1,9 @@
 using System;
-using LightTrace.Domain;
 using Microsoft.Xna.Framework;
+using RayTracer;
 using RayTracer.Tracer;
 
-namespace RayTracer.GeomertryPrimitives
+namespace LightTrace.Domain.GeomertryPrimitives
 {
     public class Sphere : Geomertry
     {

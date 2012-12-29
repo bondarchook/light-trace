@@ -44,7 +44,7 @@ namespace RayTracer.UI
 //			scene.MaxDepth = 0;
 
 			ColladaSceneReader reader2 = new ColladaSceneReader();
-			LightTrace.Domain.Scene scene = reader2.Load(@"g:\X-Files\Art\3D\blender\test\test1.dae");
+			LightTrace.Domain.Scene scene = reader2.Load(@"g:\X-Files\Art\3D\blender\test\test3.dae");
 
             _renderer = new Renderer(pictureBox, scene);
         }

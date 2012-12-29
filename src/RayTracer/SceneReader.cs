@@ -2,8 +2,8 @@
 using System.IO;
 using System.Linq;
 using LightTrace.Domain;
+using LightTrace.Domain.GeomertryPrimitives;
 using Microsoft.Xna.Framework;
-using RayTracer.GeomertryPrimitives;
 
 namespace RayTracer
 {

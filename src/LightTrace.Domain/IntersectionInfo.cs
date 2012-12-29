@@ -1,5 +1,5 @@
-﻿using Microsoft.Xna.Framework;
-using RayTracer.GeomertryPrimitives;
+﻿using LightTrace.Domain.GeomertryPrimitives;
+using Microsoft.Xna.Framework;
 
 namespace RayTracer.Tracer
 {
