@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Globalization;
+using System.Linq;
 using System.Xml.Linq;
 using Microsoft.Xna.Framework;
-using System.Linq;
 
 namespace LightTrace.ColladaReader
 {
@@ -54,7 +54,7 @@ namespace LightTrace.ColladaReader
 
 		public static Vector3 SwapAxis(this Vector3 vector)
 		{
-			return new Vector3(vector.X,vector.Z,vector.Y);
+			return new Vector3(vector.X, vector.Z, vector.Y);
 		}
 
 		public static int[] ToIntArray(this string str)
@@ -66,7 +66,7 @@ namespace LightTrace.ColladaReader
 		public static float[] ToFloatArray(this string str)
 		{
 			string[] tokens = str.Split(' ').Where(t => !string.IsNullOrEmpty(t)).ToArray();
-			return tokens.Select(t => float.Parse(t,NumberStyles.Float, CultureInfo.InvariantCulture)).ToArray();
+			return tokens.Select(t => float.Parse(t, NumberStyles.Float, CultureInfo.InvariantCulture)).ToArray();
 		}
 
 		public static string GetAttributeValue(this XElement element, string attributeName, bool mondatory)

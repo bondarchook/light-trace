@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using LightTrace.Domain;
 using LightTrace.Domain.GeomertryPrimitives;
 using LightTrace.Domain.Nodes;
@@ -35,12 +34,12 @@ namespace RayTracer.Tracer
 			float minDist = Single.MaxValue;
 			IntersectionInfo intersection = null;
 
-			int count = _scene.GetObjects(ray).Count();
-			int totalCount = _scene.Triangles.Count;
-
-			double d = count/(double) totalCount;
-
-			return new Vector3((float) d*200);
+//			int count = _scene.GetObjects(ray).Count();
+//			int totalCount = _scene.Geomertries.Count;
+//
+//			double d = count/(double) totalCount;
+//
+//			return new Vector3((float) d*200);
 
 			foreach (Geomertry geomertry in _scene.GetObjects(ray))
 			{
@@ -58,7 +57,7 @@ namespace RayTracer.Tracer
 				Vector3 surfaceColor = CalculateSurfaceColor(intersection, ray);
 
 				Material material = intersection.Geomertry.Material;
-				Vector3 reflectiveColor = material.ReflectiveColor * material.Reflectivity;
+				Vector3 reflectiveColor = material.ReflectiveColor*material.Reflectivity;
 				Vector3 reflectedColor = Vector3.Zero;
 
 				// Backface culling. Do not reflect from back side of triangle

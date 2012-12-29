@@ -5,10 +5,12 @@ namespace LightTrace.Domain.Nodes
 {
 	public class Camera : Node
 	{
-		public float XFov;
-		public double AspectRatio;
+		public float Fov;
+		public double XRatio;
+		public double YRatio;
 		public int Width;
 		public int Height;
+		public bool UseXFov;
 
 		protected double _fovXRadians;
 		protected double _halfWidth;
@@ -25,10 +27,20 @@ namespace LightTrace.Domain.Nodes
 
 		public virtual void PrepareCamera()
 		{
-			AspectRatio = Height/(double) Width;
+			if (UseXFov)
+			{
+				XRatio = 1;
+				YRatio = Height/(double) Width;
+			}
+			else
+			{
+				XRatio = Width/(double) Height;
+				YRatio = 1;
+			}
+
 			_halfWidth = Width/2.0;
 			_halfHeight = Height/2.0;
-			_fovXRadians = XFov*Math.PI/180.0;
+			_fovXRadians = Fov*Math.PI/180.0;
 			InitCameraCoordinateSystem();
 		}
 
@@ -41,8 +53,8 @@ namespace LightTrace.Domain.Nodes
 
 		public Ray CreatePrimaryRay(int x, int y)
 		{
-			double alfa = Math.Tan(_fovXRadians / 2.0) * ((x + 0.5f - _halfWidth) / _halfWidth);
-			double beta = Math.Tan(_fovXRadians / 2.0) * ((_halfHeight - y - 0.5f) / _halfHeight) * (AspectRatio);
+			double alfa = Math.Tan(_fovXRadians/2.0)*((x + 0.5f - _halfWidth)/_halfWidth)*XRatio;
+			double beta = Math.Tan(_fovXRadians/2.0)*((_halfHeight - y - 0.5f)/_halfHeight)*YRatio;
 
 			Vector3 rayDir = (float) alfa*_uVector + (float) beta*_vVector - _wVector;
 

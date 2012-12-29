@@ -63,7 +63,6 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Renderer.cs" />
-    <Compile Include="SceneReader.cs" />
     <Compile Include="Scene.cs" />
     <Compile Include="Tracer\RayTracer.cs" />
     <Compile Include="UI\Level.cs" />
@@ -103,6 +102,10 @@
     <ProjectReference Include="..\LightTrace.Domain\LightTrace.Domain.csproj">
       <Project>{E08A5584-C8D0-47B0-A7BA-62F40582E4EE}</Project>
       <Name>LightTrace.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LightTrace.SimpleSceneReader\LightTrace.SimpleSceneReader.csproj">
+      <Project>{9BE09122-DB67-48D8-BEE9-63E363773C31}</Project>
+      <Name>LightTrace.SimpleSceneReader</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using LightTrace.Domain.GeomertryPrimitives;
 using LightTrace.Domain.Nodes;
-using System.Linq;
 using LightTrace.Domain.OctTreeOptimisation;
 using Microsoft.Xna.Framework;
-using RayTracer;
 using Node = LightTrace.Domain.Nodes.Node;
 
 namespace LightTrace.Domain
@@ -16,24 +15,25 @@ namespace LightTrace.Domain
 		public string Name;
 		public IList<Node> Nodes;
 		public IList<Light> Lights;
-		public IList<Geomertry> Triangles;
+		public IList<Geomertry> Geomertries;
 
 		public Camera Camera;
 
 		public int MaxDepth;
 		public Vector3 EnvironmentColor;
-		
-		private OctTree _tree;
-		private bool _useOctTree = true;
+		public string OutputFileName;
+
+		protected OctTree _tree;
+		protected bool _useOctTree = true;
 
 		public Scene()
 		{
 			Nodes = new List<Node>();
-			MaxDepth = 1;
+			MaxDepth = 5;
 			EnvironmentColor = new Vector3(0.1f);
 		}
 
-		public void PrepareScene()
+		public virtual void PrepareScene()
 		{
 			if (!Nodes.OfType<Camera>().Any())
 				throw new Exception("No camera in scene");
@@ -42,25 +42,24 @@ namespace LightTrace.Domain
 			Camera.PrepareCamera();
 
 			Lights = Nodes.OfType<Light>().ToList();
-			Triangles = new List<Geomertry>();
+			Geomertries = new List<Geomertry>();
 
 
 			foreach (var geometry in Nodes.OfType<MeshGeometry>())
 			{
 				foreach (var triangle in geometry.Triangles)
 				{
-					triangle.Transform = geometry.Scale*geometry.Rotation * geometry.Translation;
+					triangle.Transform = geometry.Scale*geometry.Rotation*geometry.Translation;
 
-					Triangles.Add(triangle);
+					Geomertries.Add(triangle);
 				}
 			}
 
 			OctTreeBuilder builder = new OctTreeBuilder();
-			if (_useOctTree && Triangles.Any())
+			if (_useOctTree && Geomertries.Any())
 			{
-				_tree = builder.Build(Triangles, 7, 10);
+				_tree = builder.Build(Geomertries, 7, 10);
 			}
-
 		}
 
 		public IEnumerable<Geomertry> GetObjects(Ray ray)
@@ -72,7 +71,7 @@ namespace LightTrace.Domain
 			}
 			else
 			{
-				return Triangles;
+				return Geomertries;
 			}
 		}
 	}

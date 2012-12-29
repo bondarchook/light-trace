@@ -195,8 +195,7 @@ namespace LightTrace.ColladaReader
 			XElement instanceElement = _document.XPathSelectElement(string.Format("//c:library_cameras/c:camera[@id='{0}']", url), _nsMgr);
 			XElement cameraElement = instanceElement.XPathSelectElement("c:optics/c:technique_common/c:perspective", _nsMgr);
 
-			camera.XFov = cameraElement.Element(Ns + "xfov").Value.ToFloat();
-			camera.AspectRatio = cameraElement.Element(Ns + "aspect_ratio").Value.ToFloat();
+			camera.Fov = cameraElement.Element(Ns + "xfov").Value.ToFloat();
 		}
 
 		private void ReadNodeInfo(Node node, XElement nodeElement)

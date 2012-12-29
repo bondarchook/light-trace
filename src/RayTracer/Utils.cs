@@ -10,10 +10,12 @@ namespace RayTracer
 			if (control.InvokeRequired)
 			{
 				control.Invoke(new Action<T, Action<T>>(Manipulate),
-				               new object[] { control, action });
+				               new object[] {control, action});
 			}
 			else
-			{ action(control); }
+			{
+				action(control);
+			}
 		}
 	}
 }

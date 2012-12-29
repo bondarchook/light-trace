@@ -11,7 +11,7 @@ namespace LightTrace.Domain.Nodes
 		public override void Calculate(Vector3 point, out Vector3 direction, out float distance, out float attenuation)
 		{
 			distance = (point - Translation.Translation).Length();
-			attenuation = AttenuationConst + (AttenuationLinear * distance) + (AttenuationQuadratic * distance * distance);
+			attenuation = AttenuationConst + (AttenuationLinear*distance) + (AttenuationQuadratic*distance*distance);
 			direction = Vector3.Normalize((Translation.Translation - point));
 		}
 	}

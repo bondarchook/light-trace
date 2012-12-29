@@ -5,7 +5,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RayTracer", "RayTracer\RayT
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LightTrace.Domain", "LightTrace.Domain\LightTrace.Domain.csproj", "{E08A5584-C8D0-47B0-A7BA-62F40582E4EE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ColladaReader", "LightTrace.ColladaReader\LightTrace.ColladaReader.csproj", "{0DAF045C-8A8E-4ECF-A8C4-D69ED59575E1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LightTrace.ColladaReader", "LightTrace.ColladaReader\LightTrace.ColladaReader.csproj", "{0DAF045C-8A8E-4ECF-A8C4-D69ED59575E1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LightTrace.SimpleSceneReader", "LightTrace.SimpleSceneReader\LightTrace.SimpleSceneReader.csproj", "{9BE09122-DB67-48D8-BEE9-63E363773C31}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -47,6 +49,16 @@ Global
 		{0DAF045C-8A8E-4ECF-A8C4-D69ED59575E1}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{0DAF045C-8A8E-4ECF-A8C4-D69ED59575E1}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{0DAF045C-8A8E-4ECF-A8C4-D69ED59575E1}.Release|x86.ActiveCfg = Release|Any CPU
+		{9BE09122-DB67-48D8-BEE9-63E363773C31}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9BE09122-DB67-48D8-BEE9-63E363773C31}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9BE09122-DB67-48D8-BEE9-63E363773C31}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{9BE09122-DB67-48D8-BEE9-63E363773C31}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{9BE09122-DB67-48D8-BEE9-63E363773C31}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{9BE09122-DB67-48D8-BEE9-63E363773C31}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9BE09122-DB67-48D8-BEE9-63E363773C31}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9BE09122-DB67-48D8-BEE9-63E363773C31}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{9BE09122-DB67-48D8-BEE9-63E363773C31}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{9BE09122-DB67-48D8-BEE9-63E363773C31}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

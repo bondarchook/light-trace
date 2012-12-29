@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 
-[assembly: AssemblyTitle("ColladaReader")]
+[assembly: AssemblyTitle("LightTrace.SimpleSceneReader")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Microsoft")]
-[assembly: AssemblyProduct("ColladaReader")]
+[assembly: AssemblyProduct("LightTrace.SimpleSceneReader")]
 [assembly: AssemblyCopyright("Copyright © Microsoft 2012")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -22,7 +22,7 @@ using System.Runtime.InteropServices;
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
 
-[assembly: Guid("fd87c357-72a6-4a9f-a395-2534e9011ca4")]
+[assembly: Guid("b2f9a72f-7943-4076-955a-bd9250477ee3")]
 
 // Version information for an assembly consists of the following four values:
 //
