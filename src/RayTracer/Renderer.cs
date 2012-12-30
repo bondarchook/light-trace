@@ -6,6 +6,7 @@ using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using LightTrace.Domain;
 using Microsoft.Xna.Framework;
 using RayTracer.UI;
 using Color = System.Drawing.Color;
@@ -15,7 +16,7 @@ namespace RayTracer
 {
 	public class Renderer
 	{
-		private readonly LightTrace.Domain.Scene _scene;
+		private readonly Scene _scene;
 		private readonly Bitmap _bitmap;
 		private readonly Tracer.RayTracer _rayTracer;
 
@@ -23,12 +24,12 @@ namespace RayTracer
 		private readonly ILoger _loger;
 		private readonly PictureBox _pictureBox;
 
-		public LightTrace.Domain.Scene Scene
+		public Scene Scene
 		{
 			get { return _scene; }
 		}
 
-		public Renderer(PictureBox pictureBox, LightTrace.Domain.Scene scene)
+		public Renderer(PictureBox pictureBox, Scene scene)
 		{
 			_loger = Context.Instance.Loger;
 

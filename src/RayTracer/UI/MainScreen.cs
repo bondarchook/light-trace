@@ -3,6 +3,7 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using LightTrace.Domain;
 using LightTrace.SimpleSceneReader;
 
 namespace RayTracer.UI
@@ -36,7 +37,7 @@ namespace RayTracer.UI
 //			Scene scene = reader.LoadScene(@"g:\X-Files\Dropbox\Dropbox\3D_course\hw3-submissionscenes.a13d1de57b76\hw3-submissionscenes\test.test");
 //			LightTrace.Domain.Scene scene = reader.LoadScene(@"g:\X-Files\Dropbox\Dropbox\3D_course\hw3-submissionscenes.a13d1de57b76\hw3-submissionscenes\scene4-ambient.test");
 //			LightTrace.Domain.Scene scene = reader.LoadScene(@"g:\X-Files\Dropbox\Dropbox\3D_course\hw3-submissionscenes.a13d1de57b76\hw3-submissionscenes\scene4-specular.test");
-			LightTrace.Domain.Scene scene = reader.LoadScene(@"g:\X-Files\Dropbox\Dropbox\3D_course\hw3-submissionscenes.a13d1de57b76\hw3-submissionscenes\scene7.test");
+			Scene scene = reader.LoadScene(@"g:\X-Files\Dropbox\Dropbox\3D_course\hw3-submissionscenes.a13d1de57b76\hw3-submissionscenes\scene7.test");
 //            Scene scene = reader.LoadScene(@"d:\tmp\scene7.test");
 
 //			scene.Width = 160;

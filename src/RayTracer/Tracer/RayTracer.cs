@@ -8,9 +8,9 @@ namespace RayTracer.Tracer
 {
 	public class RayTracer
 	{
-		private readonly LightTrace.Domain.Scene _scene;
+		private readonly Scene _scene;
 
-		public RayTracer(LightTrace.Domain.Scene scene)
+		public RayTracer(Scene scene)
 		{
 			_scene = scene;
 		}
@@ -99,7 +99,7 @@ namespace RayTracer.Tracer
 			Vector3 eyeDirection = eyepos - point;
 			eyeDirection.Normalize();
 
-			foreach (LightTrace.Domain.Nodes.Light light in _scene.Lights)
+			foreach (Light light in _scene.Lights)
 			{
 				Vector3 direction;
 				float attenuation;
@@ -127,7 +127,7 @@ namespace RayTracer.Tracer
 		}
 
 
-		private bool CheckLight(IntersectionInfo intersection, Vector3 direction, float distanceToLight, LightTrace.Domain.Nodes.Light light)
+		private bool CheckLight(IntersectionInfo intersection, Vector3 direction, float distanceToLight, Light light)
 		{
 			Vector3 point = intersection.IntersectionPoint;
 			Ray ray = ShiftRay(point, direction);
