@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using LightTrace.Domain.GeomertryPrimitives;
+using LightTrace.Domain.Shading;
 
 namespace LightTrace.Domain.Nodes
 {

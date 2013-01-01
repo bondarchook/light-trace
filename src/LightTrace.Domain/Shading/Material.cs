@@ -1,11 +1,11 @@
-﻿using System;
+using System;
 using Microsoft.Xna.Framework;
 
-namespace LightTrace.Domain
+namespace LightTrace.Domain.Shading
 {
 	public class Material : ICloneable
 	{
-		public Vector3 DiffuseColor { get; set; }
+		public ColorSampler DiffuseColor { get; set; }
 		public Vector3 SpecularColor { get; set; }
 		public Vector3 ReflectiveColor { get; set; }
 		public Vector3 EmissionColor { get; set; }

@@ -6,6 +6,7 @@ using System.Xml.Linq;
 using System.Xml.XPath;
 using LightTrace.Domain;
 using LightTrace.Domain.Nodes;
+using LightTrace.Domain.Shading;
 using Microsoft.Xna.Framework;
 
 namespace LightTrace.ColladaReader
@@ -91,13 +92,14 @@ namespace LightTrace.ColladaReader
 			string effectId = instanceElement.Attribute("url").Value.Substring(1);
 
 			XElement effectInstanceElement = _document.XPathSelectElement(string.Format("//c:library_effects/c:effect[@id='{0}']", effectId), _nsMgr);
-			XElement effectElement = effectInstanceElement.XPathSelectElement("c:profile_COMMON/c:technique[@sid='common']/c:phong", _nsMgr);
+			XElement profileElement = effectInstanceElement.XPathSelectElement("c:profile_COMMON", _nsMgr);
+			XElement effectElement = profileElement.XPathSelectElement("c:technique[@sid='common']/c:phong", _nsMgr);
 
 			Material material = new Material();
 
 			material.EmissionColor = ReadColor(effectElement, "c:emission/c:color");
 			material.AmbientColor = ReadColor(effectElement, "c:ambient/c:color");
-			material.DiffuseColor = ReadColor(effectElement, "c:diffuse/c:color");
+			material.DiffuseColor = ReadColorSampler(profileElement, effectElement, "c:diffuse/node()");
 			material.SpecularColor = ReadColor(effectElement, "c:specular/c:color");
 			material.ReflectiveColor = ReadColor(effectElement, "c:reflective/c:color");
 
@@ -105,6 +107,30 @@ namespace LightTrace.ColladaReader
 			material.Reflectivity = ReadFloat(effectElement, "c:reflectivity/c:float");
 
 			return material;
+		}
+
+		private ColorSampler ReadColorSampler(XElement profileElement, XElement effectElement, string xpath)
+		{
+			XElement shaiderElement = effectElement.XPathSelectElement(xpath, _nsMgr);
+
+			if (shaiderElement.Name.LocalName == "color")
+			{
+				return new PlaneColorSampler(shaiderElement == null ? Vector3.Zero : shaiderElement.Value.ToVec3());
+			}
+			else if (shaiderElement.Name.LocalName == "texture")
+			{
+				string textureSamplerID = shaiderElement.Attribute("texture").Value;
+				string textureSurfcaeID = profileElement.XPathSelectElement(string.Format("c:newparam[@sid='{0}']/c:sampler2D/c:source", textureSamplerID), _nsMgr).Value;
+				string textureImageID = profileElement.XPathSelectElement(string.Format("c:newparam[@sid='{0}']/c:surface/c:init_from", textureSurfcaeID), _nsMgr).Value;
+				string texturePath = _document.XPathSelectElement(string.Format("//c:library_images/c:image[@id='{0}']/c:init_from", textureImageID), _nsMgr).Value.Trim('/');
+
+				Texture texture = new Texture(texturePath);
+				_scene.Textures.Add(texture);
+
+				return new Texture2DSampler(texture);
+			}
+
+			throw new Exception("Unknown surface shader");
 		}
 
 		private Vector3 ReadColor(XElement effectElement, string xpath)

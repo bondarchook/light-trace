@@ -34,6 +34,7 @@
     <Reference Include="Microsoft.Xna.Framework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -46,7 +47,6 @@
     <Compile Include="GeomertryPrimitives\Triangle.cs" />
     <Compile Include="Global.cs" />
     <Compile Include="IntersectionInfo.cs" />
-    <Compile Include="Material.cs" />
     <Compile Include="Nodes\Camera.cs" />
     <Compile Include="Nodes\DirectionalLight.cs" />
     <Compile Include="Nodes\MeshGeometry.cs" />
@@ -60,6 +60,11 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Ray4.cs" />
     <Compile Include="Scene.cs" />
+    <Compile Include="Shading\ColorSampler.cs" />
+    <Compile Include="Shading\Material.cs" />
+    <Compile Include="Shading\PlaneColorSampler.cs" />
+    <Compile Include="Shading\Texture.cs" />
+    <Compile Include="Shading\Texture2DSampler.cs" />
     <Compile Include="Transform.cs" />
     <Compile Include="Utils.cs" />
   </ItemGroup>

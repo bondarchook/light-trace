@@ -86,6 +86,12 @@ namespace LightTrace.Domain.GeomertryPrimitives
 				intersectionInfo.Normal = TransformNormalToCameraCoords(loaclN);
 			}
 
+			if (UseTexture())
+			{
+				Vector2 coord = Ta.Value*baryCoord.X+Tb.Value*baryCoord.Y+Tc.Value*baryCoord.Z;
+				intersectionInfo.TexCoord = coord;
+			}
+
 			point = TransformPointToCameraCoords(point);
 			intersectionInfo.IntersectionPoint = point.ToV3();
 

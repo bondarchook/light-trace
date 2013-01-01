@@ -4,6 +4,7 @@ using System.Linq;
 using LightTrace.Domain.GeomertryPrimitives;
 using LightTrace.Domain.Nodes;
 using LightTrace.Domain.OctTreeOptimisation;
+using LightTrace.Domain.Shading;
 using Microsoft.Xna.Framework;
 using Node = LightTrace.Domain.Nodes.Node;
 
@@ -16,6 +17,7 @@ namespace LightTrace.Domain
 		public IList<Node> Nodes;
 		public IList<Light> Lights;
 		public IList<Geomertry> Geomertries;
+		public IList<Texture> Textures;
 
 		public Camera Camera;
 
@@ -29,6 +31,7 @@ namespace LightTrace.Domain
 		public Scene()
 		{
 			Nodes = new List<Node>();
+			Textures = new List<Texture>();
 			MaxDepth = 5;
 			EnvironmentColor = new Vector3(0.1f);
 		}
@@ -44,6 +47,10 @@ namespace LightTrace.Domain
 			Lights = Nodes.OfType<Light>().ToList();
 			Geomertries = new List<Geomertry>();
 
+			foreach (Texture texture in Textures)
+			{
+				texture.PrepareTexture();
+			}
 
 			foreach (var geometry in Nodes.OfType<MeshGeometry>())
 			{
@@ -58,7 +65,7 @@ namespace LightTrace.Domain
 			OctTreeBuilder builder = new OctTreeBuilder();
 			if (_useOctTree && Geomertries.Any())
 			{
-				_tree = builder.Build(Geomertries, 7, 10);
+				_tree = builder.Build(Geomertries, 1, 10);
 			}
 		}
 

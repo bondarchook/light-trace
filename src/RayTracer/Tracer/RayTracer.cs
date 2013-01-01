@@ -2,6 +2,7 @@
 using LightTrace.Domain;
 using LightTrace.Domain.GeomertryPrimitives;
 using LightTrace.Domain.Nodes;
+using LightTrace.Domain.Shading;
 using Microsoft.Xna.Framework;
 
 namespace RayTracer.Tracer
@@ -54,6 +55,8 @@ namespace RayTracer.Tracer
 
 			if (intersection != null)
 			{
+				//return new Vector3(intersection.TexCoord.X, intersection.TexCoord.Y, 0.5f);
+
 				Vector3 surfaceColor = CalculateSurfaceColor(intersection, ray);
 
 				Material material = intersection.Geomertry.Material;
@@ -83,7 +86,7 @@ namespace RayTracer.Tracer
 		private Vector3 CalculateSurfaceColor(IntersectionInfo intersectionInfo, Ray ray)
 		{
 			Material material = intersectionInfo.Geomertry.Material;
-			Vector3 diffuseColor = material.DiffuseColor;
+			Vector3 diffuseColor = material.DiffuseColor.GetColor(intersectionInfo.TexCoord);
 			Vector3 specularColor = material.SpecularColor;
 			Vector3 emissionColor = material.EmissionColor;
 			Vector3 ambientColor = material.AmbientColor;

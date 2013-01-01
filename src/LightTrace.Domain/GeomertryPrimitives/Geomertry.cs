@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using LightTrace.Domain.Shading;
+using Microsoft.Xna.Framework;
 using RayTracer.Tracer;
 
 namespace LightTrace.Domain.GeomertryPrimitives

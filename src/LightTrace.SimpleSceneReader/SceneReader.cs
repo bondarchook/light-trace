@@ -4,6 +4,7 @@ using System.Linq;
 using LightTrace.Domain;
 using LightTrace.Domain.GeomertryPrimitives;
 using LightTrace.Domain.Nodes;
+using LightTrace.Domain.Shading;
 using Microsoft.Xna.Framework;
 
 namespace LightTrace.SimpleSceneReader
@@ -209,7 +210,7 @@ namespace LightTrace.SimpleSceneReader
 					}
 				case "diffuse":
 					{
-						_material.DiffuseColor = tokens.ToVec3(1);
+						_material.DiffuseColor = new PlaneColorSampler(tokens.ToVec3(1));
 						break;
 					}
 				case "specular":
