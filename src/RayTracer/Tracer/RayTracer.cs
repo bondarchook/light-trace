@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 using LightTrace.Domain;
 using LightTrace.Domain.GeomertryPrimitives;
 using LightTrace.Domain.Nodes;
@@ -35,12 +38,12 @@ namespace RayTracer.Tracer
 			float minDist = Single.MaxValue;
 			IntersectionInfo intersection = null;
 
-//			int count = _scene.GetObjects(ray).Count();
-//			int totalCount = _scene.Geomertries.Count;
-//
-//			double d = count/(double) totalCount;
-//
-//			return new Vector3((float) d*200);
+			long count = _scene.GetObjectsCount(ray);
+			long totalCount = _scene.Geomertries.Count;
+
+			double d = count/(double) totalCount;
+
+			return new Vector3((float) d*0.5f);
 
 			foreach (Geomertry geomertry in _scene.GetObjects(ray))
 			{

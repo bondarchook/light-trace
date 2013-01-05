@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
 using Microsoft.Xna.Framework;
 
 namespace LightTrace.Domain
@@ -49,6 +50,18 @@ namespace LightTrace.Domain
 		public static Vector3 SwapAxis(this Vector3 vector)
 		{
 			return new Vector3(vector.X, vector.Z, vector.Y);
+		}
+
+		public static float AxisValue(this Vector3 vector, int index)
+		{
+			if (index == 0)
+				return vector.X;
+			if (index == 1)
+				return vector.Y;
+			if (index == 2)
+				return vector.Z;
+
+			throw new Exception("axis index should be 0, 1 or 2");
 		}
 	}
 }

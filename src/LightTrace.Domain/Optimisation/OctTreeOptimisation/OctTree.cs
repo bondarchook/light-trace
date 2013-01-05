@@ -5,7 +5,7 @@ using System.Text;
 using LightTrace.Domain.GeomertryPrimitives;
 using Microsoft.Xna.Framework;
 
-namespace LightTrace.Domain.OctTreeOptimisation
+namespace LightTrace.Domain.Optimisation.OctTreeOptimisation
 {
 	public class OctTree
 	{

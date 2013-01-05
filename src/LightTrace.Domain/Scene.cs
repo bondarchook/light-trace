@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using LightTrace.Domain.GeomertryPrimitives;
 using LightTrace.Domain.Nodes;
-using LightTrace.Domain.OctTreeOptimisation;
+using LightTrace.Domain.Optimisation.BVHOptimisation;
+using LightTrace.Domain.Optimisation.OctTreeOptimisation;
 using LightTrace.Domain.Shading;
 using Microsoft.Xna.Framework;
 using Node = LightTrace.Domain.Nodes.Node;
@@ -26,6 +27,7 @@ namespace LightTrace.Domain
 		public string OutputFileName;
 
 		protected OctTree _tree;
+		protected BvhTree _BvhTree;
 		protected bool _useOctTree = true;
 
 		public Scene()
@@ -62,10 +64,13 @@ namespace LightTrace.Domain
 				}
 			}
 
-			OctTreeBuilder builder = new OctTreeBuilder();
 			if (_useOctTree && Geomertries.Any())
 			{
-				_tree = builder.Build(Geomertries, 1, 10);
+//				OctTreeBuilder builder = new OctTreeBuilder();
+//				_tree = builder.Build(Geomertries, 6, 5);
+
+				BvhTreeBuilder bvhTreeBuilder = new BvhTreeBuilder();
+				_BvhTree = bvhTreeBuilder.BuildBVHTree(Geomertries, 6, 5);
 			}
 		}
 
@@ -73,12 +78,26 @@ namespace LightTrace.Domain
 		{
 			if (_useOctTree)
 			{
-				IEnumerable<Geomertry> triangles = _tree.GetPotencialObjects(ray);
+				//IEnumerable<Geomertry> triangles = _tree.GetPotencialObjects(ray);
+				IEnumerable<Geomertry> triangles = _BvhTree.GetPotencialObjects(ray);
 				return triangles;
 			}
 			else
 			{
 				return Geomertries;
+			}
+		}
+
+		public long GetObjectsCount(Ray ray)
+		{
+			if (_useOctTree)
+			{
+				//IEnumerable<Geomertry> triangles = _tree.GetPotencialObjects(ray);
+				return _BvhTree.GetPotencialObjectsCount(ray);
+			}
+			else
+			{
+				return Geomertries.Count;
 			}
 		}
 	}

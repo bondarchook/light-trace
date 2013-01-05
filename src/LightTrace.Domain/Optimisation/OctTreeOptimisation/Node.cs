@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using LightTrace.Domain.GeomertryPrimitives;
 using Microsoft.Xna.Framework;
 
-namespace LightTrace.Domain.OctTreeOptimisation
+namespace LightTrace.Domain.Optimisation.OctTreeOptimisation
 {
 	public class Node
 	{

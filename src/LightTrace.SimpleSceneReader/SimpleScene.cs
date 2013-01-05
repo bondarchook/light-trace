@@ -3,7 +3,7 @@ using System.Linq;
 using LightTrace.Domain;
 using LightTrace.Domain.GeomertryPrimitives;
 using LightTrace.Domain.Nodes;
-using LightTrace.Domain.OctTreeOptimisation;
+using LightTrace.Domain.Optimisation.OctTreeOptimisation;
 using Microsoft.Xna.Framework;
 
 namespace LightTrace.SimpleSceneReader

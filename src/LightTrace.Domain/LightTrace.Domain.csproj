@@ -21,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <RunCodeAnalysis>true</RunCodeAnalysis>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -54,9 +55,17 @@
     <Compile Include="Nodes\Node.cs" />
     <Compile Include="Nodes\PointLight.cs" />
     <Compile Include="Nodes\TargetedCamera.cs" />
-    <Compile Include="OctTreeOptimisation\Node.cs" />
-    <Compile Include="OctTreeOptimisation\OctTree.cs" />
-    <Compile Include="OctTreeOptimisation\OctTreeBuilder.cs" />
+    <Compile Include="Optimisation\BVHOptimisation\BvhNode.cs" />
+    <Compile Include="Optimisation\BVHOptimisation\BvhTree.cs" />
+    <Compile Include="Optimisation\BVHOptimisation\BvhTreeBuilder.cs" />
+    <Compile Include="Optimisation\BVHOptimisation\Intersectable.cs" />
+    <Compile Include="Optimisation\BVHOptimisation\Range.cs" />
+    <Compile Include="Optimisation\BVHOptimisation\SphereIntersectable.cs" />
+    <Compile Include="Optimisation\BVHOptimisation\TriangeIntersectable.cs" />
+    <Compile Include="Optimisation\OctTreeOptimisation\Node.cs" />
+    <Compile Include="Optimisation\OctTreeOptimisation\OctTree.cs" />
+    <Compile Include="Optimisation\OctTreeOptimisation\OctTreeBuilder.cs" />
+    <Compile Include="Optimisation\OptimisationUtils.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Ray4.cs" />
     <Compile Include="Scene.cs" />
@@ -68,6 +77,7 @@
     <Compile Include="Transform.cs" />
     <Compile Include="Utils.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
