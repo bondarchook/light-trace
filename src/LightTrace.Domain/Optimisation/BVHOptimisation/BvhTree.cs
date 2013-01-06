@@ -8,17 +8,15 @@ namespace LightTrace.Domain.Optimisation.BVHOptimisation
 	public class BvhTree
 	{
 		private BvhNode _root;
-		private readonly Intersectable[] _intersectables;
 
-		public BvhTree(BvhNode root, Intersectable[] intersectables)
+		public BvhTree(BvhNode root)
 		{
 			_root = root;
-			_intersectables = intersectables;
 		}
 
 		public IEnumerable<Geomertry> GetPotencialObjects(Ray ray)
 		{
-			List<Range> result = new List<Range>();
+			List<Intersectable[]> result = new List<Intersectable[]>();
 
 			GetObjects(ray, _root, result);
 
@@ -27,14 +25,15 @@ namespace LightTrace.Domain.Optimisation.BVHOptimisation
 
 		public long GetPotencialObjectsCount(Ray ray)
 		{
-			List<Range> result = new List<Range>();
+			List<Intersectable[]> result = new List<Intersectable[]>();
 
 			GetObjects(ray, _root, result);
 
-			return result.Sum(range => range.End - range.Begin);
+//			return result.Sum(range => range.LongLength);
+			return result.Count;
 		}
 
-		private void GetObjects(Ray ray, BvhNode node, List<Range> result)
+		private void GetObjects(Ray ray, BvhNode node, List<Intersectable[]> result)
 		{
 			if (!ray.Intersects(node.BoundingBox).HasValue)
 				return;
@@ -52,7 +51,7 @@ namespace LightTrace.Domain.Optimisation.BVHOptimisation
 				{
 					if (leftNode.IsLeaf)
 					{
-						result.Add(new Range(leftNode.LeftIndex, leftNode.RightIndex));
+						result.Add(leftNode.Objects);
 					}
 					else
 					{
@@ -68,7 +67,7 @@ namespace LightTrace.Domain.Optimisation.BVHOptimisation
 				{
 					if (rightNode.IsLeaf)
 					{
-						result.Add(new Range(rightNode.LeftIndex, rightNode.RightIndex));
+						result.Add(rightNode.Objects);
 					}
 					else
 					{
@@ -78,13 +77,13 @@ namespace LightTrace.Domain.Optimisation.BVHOptimisation
 			}
 		}
 
-		private IEnumerable<Geomertry> CreateEnumerable(IList<Range> ranges)
+		private IEnumerable<Geomertry> CreateEnumerable(List<Intersectable[]> ranges)
 		{
-			foreach (Range range in ranges)
+			foreach (Intersectable[] range in ranges)
 			{
-				for (int i = range.Begin; i < range.End; i++)
+				for (long i = 0; i < range.LongLength; i++)
 				{
-					yield return _intersectables[i].Geomertry;
+					yield return range[i].Geomertry;
 				}
 			}
 		}

@@ -38,12 +38,14 @@ namespace RayTracer.Tracer
 			float minDist = Single.MaxValue;
 			IntersectionInfo intersection = null;
 
-			long count = _scene.GetObjectsCount(ray);
-			long totalCount = _scene.Geomertries.Count;
-
-			double d = count/(double) totalCount;
-
-			return new Vector3((float) d*0.5f);
+//			long count = _scene.GetObjectsCount(ray);
+////			long count = _scene.GetObjects(ray).Count();
+//			long totalCount = _scene.Geomertries.Count;
+//
+//			double d = count/(double) totalCount;
+//
+////			return new Vector3((float) d*1000.5f);
+//			finalColor += new Vector3((float) d*0.5f);
 
 			foreach (Geomertry geomertry in _scene.GetObjects(ray))
 			{

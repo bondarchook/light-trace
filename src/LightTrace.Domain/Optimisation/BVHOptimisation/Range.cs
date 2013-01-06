@@ -2,13 +2,15 @@
 {
 	public struct Range
 	{
-		public int Begin;
-		public int End;
+		public int Axis;
+		public long Begin;
+		public long End;
 
-		public Range(int begin, int end)
+		public Range(long begin, long end, int axis)
 		{
 			Begin = begin;
 			End = end;
+			Axis = axis;
 		}
 	}
 }

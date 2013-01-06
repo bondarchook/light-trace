@@ -70,7 +70,7 @@ namespace LightTrace.Domain
 //				_tree = builder.Build(Geomertries, 6, 5);
 
 				BvhTreeBuilder bvhTreeBuilder = new BvhTreeBuilder();
-				_BvhTree = bvhTreeBuilder.BuildBVHTree(Geomertries, 6, 5);
+				_BvhTree = bvhTreeBuilder.BuildBvhTree(Geomertries, 36, 1);
 			}
 		}
 
