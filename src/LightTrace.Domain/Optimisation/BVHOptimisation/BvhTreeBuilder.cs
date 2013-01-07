@@ -39,13 +39,13 @@ namespace LightTrace.Domain.Optimisation.BVHOptimisation
 
 		private void BuildRecursive(BvhNode node, Intersectable[] objects, int depht)
 		{
-//			var axisIndex = MaxAxisIndex(node.BoundingBox);
-			var axisIndex = 2;
+			//var axisIndex = MaxAxisIndex(node.BoundingBox);
+			int axisIndex;
 
-			Array.Sort(objects, (objA, objB) => objA.Center.AxisValue(axisIndex).CompareTo(objB.Center.AxisValue(axisIndex)));
-			float[] centers = objects.Select(intersectable => intersectable.Center.AxisValue(axisIndex)).ToArray();
+			float? splitPoint = FindSplit(node, objects, out axisIndex);
 
-			if (objects.Length < _minObjectsPerLeaf || depht > _maxDepth)
+
+			if (!splitPoint.HasValue || objects.Length < _minObjectsPerLeaf || depht > _maxDepth)
 			{
 				node.IsLeaf = true;
 				node.Objects = objects;
@@ -53,32 +53,22 @@ namespace LightTrace.Domain.Optimisation.BVHOptimisation
 				return;
 			}
 
+			Array.Sort(objects, (objA, objB) => objA.Center.AxisValue(axisIndex).CompareTo(objB.Center.AxisValue(axisIndex)));
+			float[] centers = objects.Select(intersectable => intersectable.Center.AxisValue(axisIndex)).ToArray();
+
 			//float splitPoint = (node.BoundingBox.Max.AxisValue(axisIndex) + node.BoundingBox.Min.AxisValue(axisIndex))/2;
-			float splitPoint = (float) (_random.NextDouble()*(centers[centers.Length - 1] - centers[0]) + centers[0]);
+			//float splitPoint = (float) (_random.NextDouble()*(centers[centers.Length - 1] - centers[0]) + centers[0]);
+
 			int splitIndex = Array.BinarySearch(centers, splitPoint);
+			splitIndex = splitIndex < 0 ? ~splitIndex : splitIndex;
 
-			if (splitIndex < 0)
-			{
-				splitIndex = ~splitIndex;
-			}
-
-//			if (splitIndex == 0)
-//				Console.WriteLine("{0} {1} {2} [{3} {4}]", splitPoint, centers[0], centers[centers.Length - 1], node.BoundingBox.Min.AxisValue(axisIndex) , node.BoundingBox.Max.AxisValue(axisIndex));
 
 			long leftLenght = splitIndex;
-
 			if (leftLenght > 0)
 			{
-				Intersectable[] left = new Intersectable[leftLenght];
-				Array.Copy(objects, 0, left, 0, leftLenght);
+				var left = CopyArraySection(objects, 0, leftLenght);
 
-				BoundingBox leftBox = BoundingBox.CreateFromPoints(left[0].BoundingBox.GetCorners());
-				for (long i = 0; i < left.Length; i++)
-				{
-					//BoundingBox.CreateMerged(ref leftBox, ref left[i].BoundingBox, out leftBox);
-					leftBox =  BoundingBox.CreateMerged(leftBox, left[i].BoundingBox);
-//					leftBox =  BoundingBox.CreateFromPoints(left.Select(intersectable => intersectable.Center));
-				}
+				BoundingBox leftBox = CalculateBoundingBox(left);
 
 				node.Left = new BvhNode(leftBox);
 				BuildRecursive(node.Left, left, depht + 1);
@@ -87,21 +77,95 @@ namespace LightTrace.Domain.Optimisation.BVHOptimisation
 			long rightLenght = objects.LongLength - splitIndex;
 			if (rightLenght > 0)
 			{
-				Intersectable[] right = new Intersectable[rightLenght];
-				Array.Copy(objects, splitIndex, right, 0, rightLenght);
+				var right = CopyArraySection(objects, splitIndex, rightLenght);
 
-				BoundingBox rightBox = BoundingBox.CreateFromPoints(right[0].BoundingBox.GetCorners());
-				for (int i = 0; i < right.Length; i++)
-				{
-//					BoundingBox.CreateMerged(ref rightBox, ref right[i].BoundingBox, out rightBox);
-					rightBox = BoundingBox.CreateMerged(rightBox, right[i].BoundingBox);
-//					rightBox = BoundingBox.CreateFromPoints(right.Select(intersectable => intersectable.Center));
-
-				}
+				BoundingBox rightBox = CalculateBoundingBox(right);
 
 				node.Right = new BvhNode(rightBox);
 				BuildRecursive(node.Right, right, depht + 1);
 			}
+		}
+
+		private float? FindSplit(BvhNode node, Intersectable[] objects, out int axisIndexa)
+		{
+			float sP = BoxSurface(node.BoundingBox);
+
+			int bestAxis = MaxAxisIndex(node.BoundingBox);
+			float? bestSplit=null;
+			float minC = float.MaxValue;
+
+			for (int axis = 0; axis < 3; axis++)
+			{
+				Array.Sort(objects, (objA, objB) => objA.Center.AxisValue(axis).CompareTo(objB.Center.AxisValue(axis)));
+				float[] centers = objects.Select(intersectable => intersectable.Center.AxisValue(axis)).ToArray();
+
+				float min = node.BoundingBox.Min.AxisValue(axis);
+				float max = node.BoundingBox.Max.AxisValue(axis);
+				float step = (max - min)/50;
+
+				for (float split = min + step; split < max; split += step)
+				{
+					int splitIndex = Array.BinarySearch(centers, split);
+					splitIndex = splitIndex < 0 ? ~splitIndex : splitIndex;
+
+					int nL = splitIndex;
+					int nR = objects.Length - splitIndex;
+
+					float sL = BoxSurface(CalculateBoundingBox(objects, 0, nL));
+					float sR = BoxSurface(CalculateBoundingBox(objects, splitIndex, nR));
+
+					float c = (sL/sP)*nL + (sR/sP)*nR;
+
+					if (c < minC)
+					{
+						minC = c;
+						bestSplit = split;
+						bestAxis = axis;
+					}
+				}
+			}
+
+			if (minC < objects.Length)
+			{	
+				axisIndexa = bestAxis;
+				return bestSplit;
+			}
+			else
+			{
+				axisIndexa = 1;
+				return null;
+			}
+		}
+
+		private static float BoxSurface(BoundingBox box)
+		{
+			BoundingBox parentBox = box;
+			float a = parentBox.Max.X - parentBox.Min.X;
+			float b = parentBox.Max.Y - parentBox.Min.Y;
+			float c = parentBox.Max.Z - parentBox.Min.Z;
+			return a*b + a*c + b*c;
+		}
+
+		private static Intersectable[] CopyArraySection(Intersectable[] objects, long startIndex, long length)
+		{
+			Intersectable[] left = new Intersectable[length];
+			Array.Copy(objects, startIndex, left, 0, length);
+			return left;
+		}
+
+		private static BoundingBox CalculateBoundingBox(Intersectable[] objects)
+		{
+			return CalculateBoundingBox(objects, 0, objects.Length);
+		}
+
+		private static BoundingBox CalculateBoundingBox(Intersectable[] objects, long startIndex, long endIndex)
+		{
+			BoundingBox box = BoundingBox.CreateFromPoints(objects[0].BoundingBox.GetCorners());
+			for (long i = startIndex; i < endIndex; i++)
+			{
+				BoundingBox.CreateMerged(ref box, ref objects[i].BoundingBox, out box);
+			}
+			return box;
 		}
 
 		private static int MaxAxisIndex(BoundingBox boundingBox)
