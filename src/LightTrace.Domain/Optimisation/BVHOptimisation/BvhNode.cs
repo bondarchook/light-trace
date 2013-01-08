@@ -12,6 +12,10 @@ namespace LightTrace.Domain.Optimisation.BVHOptimisation
 		public BvhNode Left;
 		public BvhNode Right;
 
+		public BvhNode()
+		{
+		}
+
 		public BvhNode(BoundingBox boundingBox)
 		{
 			BoundingBox = boundingBox;

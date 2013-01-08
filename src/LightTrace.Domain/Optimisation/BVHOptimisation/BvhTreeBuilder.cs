@@ -15,20 +15,25 @@ namespace LightTrace.Domain.Optimisation.BVHOptimisation
 
 		private int _maxDepth = 4;
 		private int _minObjectsPerLeaf = 2;
-        private readonly ILoger _loger;
+		private float _triangleCost = 1;
+		private float _boxCost = 1;
 
-	    public BvhTreeBuilder()
-	    {
-            _loger = Context.Instance.Loger;
-	    }
+		private readonly ILoger _loger;
 
-	    public BvhTree BuildBvhTree(IEnumerable<Geomertry> geomertries, int maxDepth, int minObjPerLeaf)
+		public BvhTreeBuilder()
+		{
+			_loger = Context.Instance.Loger;
+		}
+
+		public BvhTree BuildBvhTree(IEnumerable<Geomertry> geomertries, int maxDepth, int minObjPerLeaf, float triangleCost, float boxCost)
 		{
 			_maxDepth = maxDepth;
 			_minObjectsPerLeaf = minObjPerLeaf;
+			_triangleCost = triangleCost;
+			_boxCost = boxCost;
 
-            Stopwatch stopwatch = new Stopwatch();
-            stopwatch.Start();
+			Stopwatch stopwatch = new Stopwatch();
+			stopwatch.Start();
 
 			_objects = geomertries.Select(Intersectable.CreateIntersectable).ToArray();
 
@@ -37,10 +42,10 @@ namespace LightTrace.Domain.Optimisation.BVHOptimisation
 
 			BuildRecursive(root, _objects, 0);
 
-            stopwatch.Stop();
-            _loger.Log(Level.Info, string.Format("BVH tree build time: {0} ms", stopwatch.ElapsedMilliseconds));
+			stopwatch.Stop();
+			_loger.Log(Level.Info, string.Format("BVH tree build time: {0} ms", stopwatch.ElapsedMilliseconds));
 
-            return new BvhTree(root);
+			return new BvhTree(root);
 		}
 
 		private void BuildRecursive(BvhNode node, Intersectable[] objects, int depht)
@@ -49,7 +54,6 @@ namespace LightTrace.Domain.Optimisation.BVHOptimisation
 			int axisIndex;
 
 			float? splitPoint = FindSplit(node, objects, out axisIndex);
-
 
 			if (!splitPoint.HasValue || objects.Length < _minObjectsPerLeaf || depht > _maxDepth)
 			{
@@ -62,9 +66,6 @@ namespace LightTrace.Domain.Optimisation.BVHOptimisation
 			Array.Sort(objects, (objA, objB) => objA.Center.AxisValue(axisIndex).CompareTo(objB.Center.AxisValue(axisIndex)));
 			float[] centers = objects.Select(intersectable => intersectable.Center.AxisValue(axisIndex)).ToArray();
 
-			//float splitPoint = (node.BoundingBox.Max.AxisValue(axisIndex) + node.BoundingBox.Min.AxisValue(axisIndex))/2;
-			//float splitPoint = (float) (_random.NextDouble()*(centers[centers.Length - 1] - centers[0]) + centers[0]);
-
 			int splitIndex = Array.BinarySearch(centers, splitPoint);
 			splitIndex = splitIndex < 0 ? ~splitIndex : splitIndex;
 
@@ -72,24 +73,25 @@ namespace LightTrace.Domain.Optimisation.BVHOptimisation
 			long leftLenght = splitIndex;
 			if (leftLenght > 0)
 			{
-				var left = CopyArraySection(objects, 0, leftLenght);
-
-				BoundingBox leftBox = CalculateBoundingBox(left);
-
-				node.Left = new BvhNode(leftBox);
-				BuildRecursive(node.Left, left, depht + 1);
+				node.Left = new BvhNode();
+				CreateAndSplitChildNode(node.Left, objects, 0, leftLenght, depht + 1);
 			}
 
 			long rightLenght = objects.LongLength - splitIndex;
 			if (rightLenght > 0)
 			{
-				var right = CopyArraySection(objects, splitIndex, rightLenght);
-
-				BoundingBox rightBox = CalculateBoundingBox(right);
-
-				node.Right = new BvhNode(rightBox);
-				BuildRecursive(node.Right, right, depht + 1);
+				node.Right = new BvhNode();
+				CreateAndSplitChildNode(node.Right, objects, splitIndex, rightLenght, depht + 1);
 			}
+		}
+
+		private void CreateAndSplitChildNode(BvhNode node, Intersectable[] objects, int splitIndex, long lenght, int depht)
+		{
+			var right = CopyArraySection(objects, splitIndex, lenght);
+
+			node.BoundingBox = CalculateBoundingBox(right);
+
+			BuildRecursive(node, right, depht);
 		}
 
 		private float? FindSplit(BvhNode node, Intersectable[] objects, out int axisIndexa)
@@ -97,7 +99,7 @@ namespace LightTrace.Domain.Optimisation.BVHOptimisation
 			float sP = BoxSurface(node.BoundingBox);
 
 			int bestAxis = MaxAxisIndex(node.BoundingBox);
-			float? bestSplit=null;
+			float? bestSplit = null;
 			float minC = float.MaxValue;
 
 			for (int axis = 0; axis < 3; axis++)
@@ -120,7 +122,7 @@ namespace LightTrace.Domain.Optimisation.BVHOptimisation
 					float sL = BoxSurface(CalculateBoundingBox(objects, 0, nL));
 					float sR = BoxSurface(CalculateBoundingBox(objects, splitIndex, nR));
 
-					float c = (sL/sP)*nL + (sR/sP)*nR;
+					float c = _boxCost + (sL/sP)*nL*_triangleCost + (sR/sP)*nR*_triangleCost;
 
 					if (c < minC)
 					{
@@ -131,8 +133,8 @@ namespace LightTrace.Domain.Optimisation.BVHOptimisation
 				}
 			}
 
-			if (minC < objects.Length)
-			{	
+			if (minC < objects.Length*_triangleCost)
+			{
 				axisIndexa = bestAxis;
 				return bestSplit;
 			}

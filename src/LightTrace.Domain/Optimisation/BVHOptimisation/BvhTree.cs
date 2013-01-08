@@ -129,6 +129,10 @@ namespace LightTrace.Domain.Optimisation.BVHOptimisation
 	            if (node.Right != null)
 	                CalculateStatistic(node.Right);
 	        }
+			if (_leafCount != 0)
+			{
+				_avrCount = _totalCount / _leafCount;
+			}
 	    }
 	}
 }

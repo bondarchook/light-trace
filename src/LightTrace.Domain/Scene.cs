@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.Globalization;
 using System.Linq;
 using LightTrace.Domain.GeomertryPrimitives;
 using LightTrace.Domain.Nodes;
@@ -26,9 +28,8 @@ namespace LightTrace.Domain
 		public Vector3 EnvironmentColor;
 		public string OutputFileName;
 
-		protected OctTree _tree;
 	    public BvhTree BvhTree;
-		protected bool _useOctTree = true;
+		protected bool UseOptimisation = true;
 
 		public Scene()
 		{
@@ -64,21 +65,26 @@ namespace LightTrace.Domain
 				}
 			}
 
-			if (_useOctTree && Geomertries.Any())
+			if (UseOptimisation && Geomertries.Any())
 			{
-//				OctTreeBuilder builder = new OctTreeBuilder();
-//				_tree = builder.Build(Geomertries, 6, 5);
-
-				BvhTreeBuilder bvhTreeBuilder = new BvhTreeBuilder();
-				BvhTree = bvhTreeBuilder.BuildBvhTree(Geomertries, 5, 1);
+				BuildTree();
 			}
+		}
+
+		protected void BuildTree()
+		{
+			BvhTreeBuilder bvhTreeBuilder = new BvhTreeBuilder();
+
+			var triangleCost = float.Parse(ConfigurationManager.AppSettings["TriangleIntersect"],CultureInfo.InvariantCulture);
+			var boxCost = float.Parse(ConfigurationManager.AppSettings["BoundingBoxIntersect"], CultureInfo.InvariantCulture);
+
+			BvhTree = bvhTreeBuilder.BuildBvhTree(Geomertries, 15, 1, triangleCost, boxCost);
 		}
 
 		public IEnumerable<Geomertry> GetObjects(Ray ray)
 		{
-			if (_useOctTree)
+			if (UseOptimisation)
 			{
-				//IEnumerable<Geomertry> triangles = _tree.GetPotencialObjects(ray);
 				IEnumerable<Geomertry> triangles = BvhTree.GetPotencialObjects(ray);
 				return triangles;
 			}
@@ -90,9 +96,8 @@ namespace LightTrace.Domain
 
 		public long GetObjectsCount(Ray ray)
 		{
-			if (_useOctTree)
+			if (UseOptimisation)
 			{
-				//IEnumerable<Geomertry> triangles = _tree.GetPotencialObjects(ray);
 				return BvhTree.GetPotencialObjectsCount(ray);
 			}
 			else

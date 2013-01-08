@@ -44,8 +44,8 @@ namespace RayTracer.Tracer
 //
 //			double d = count/(double) totalCount;
 //
-////			return new Vector3((float) d*1000.5f);
-//			finalColor += new Vector3((float) d*0.5f);
+//			return new Vector3((float) d*1000.5f);
+////			finalColor += new Vector3((float) d*2000.5f);
 
 			foreach (Geomertry geomertry in _scene.GetObjects(ray))
 			{

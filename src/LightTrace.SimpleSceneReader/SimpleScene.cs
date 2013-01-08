@@ -22,16 +22,11 @@ namespace LightTrace.SimpleSceneReader
 		{
 			Camera.PrepareCamera();
 
-			_useOctTree = true;
+			UseOptimisation = true;
 
-			if (_useOctTree && Geomertries.Any())
+			if (UseOptimisation && Geomertries.Any())
 			{
-//                OctTreeBuilder builder = new OctTreeBuilder();
-//				_tree = builder.Build(Geomertries, 5, 10);
-
-                BvhTreeBuilder bvhTreeBuilder = new BvhTreeBuilder();
-                BvhTree = bvhTreeBuilder.BuildBvhTree(Geomertries, 20, 1);
-
+				BuildTree();
 			}
 		}
 	}

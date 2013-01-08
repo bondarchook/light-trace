@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Configuration;
 using System.Drawing.Imaging;
+using System.Globalization;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using LightTrace.ColladaReader;
 using LightTrace.Domain;
+using LightTrace.Domain.Benchmark;
 using LightTrace.SimpleSceneReader;
 
 namespace RayTracer.UI
@@ -33,13 +36,14 @@ namespace RayTracer.UI
 		{
 			Context.Instance.Loger = new ListBoxLog(LogListBox);
 
+			Benchmark();
 
 			SceneReader reader = new SceneReader();
 //			Scene scene = reader.LoadScene(@"g:\X-Files\Dropbox\Dropbox\3D_course\hw3-submissionscenes.a13d1de57b76\hw3-submissionscenes\test.test");
 //			LightTrace.Domain.Scene scene = reader.LoadScene(@"g:\X-Files\Dropbox\Dropbox\3D_course\hw3-submissionscenes.a13d1de57b76\hw3-submissionscenes\scene4-ambient.test");
 //			LightTrace.Domain.Scene scene = reader.LoadScene(@"g:\X-Files\Dropbox\Dropbox\3D_course\hw3-submissionscenes.a13d1de57b76\hw3-submissionscenes\scene4-specular.test");
-//			Scene scene = reader.LoadScene(@"g:\X-Files\Dropbox\Dropbox\3D_course\hw3-submissionscenes.a13d1de57b76\hw3-submissionscenes\scene7.test");
-            Scene scene = reader.LoadScene(@"d:\tmp\scene7.test");
+			Scene scene = reader.LoadScene(@"g:\X-Files\Dropbox\Dropbox\3D_course\hw3-submissionscenes.a13d1de57b76\hw3-submissionscenes\scene7.test");
+//            Scene scene = reader.LoadScene(@"d:\tmp\scene7.test");
 
 //			scene.Width = 160;
 //			scene.Height = 120;
@@ -50,6 +54,25 @@ namespace RayTracer.UI
 //			Scene scene = reader2.Load(@"g:\X-Files\Art\3D\blender\test\RayTracerTests\test3.dae");
 
 			_renderer = new Renderer(pictureBox, scene);
+		}
+
+		private static void Benchmark()
+		{
+			IntersecionBenchmark benchmark = new IntersecionBenchmark();
+			
+			var count = 100000;
+			float triangleIntersect = benchmark.TriangleIntersect(count);
+			float boundingBoxIntersect = benchmark.BoundingBoxIntersect(count);
+
+			Configuration oConfig = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+
+			oConfig.AppSettings.Settings.Remove("TriangleIntersect");
+			oConfig.AppSettings.Settings.Add("TriangleIntersect", triangleIntersect.ToString(CultureInfo.InvariantCulture));
+			
+			oConfig.AppSettings.Settings.Remove("BoundingBoxIntersect");
+			oConfig.AppSettings.Settings.Add("BoundingBoxIntersect", boundingBoxIntersect.ToString(CultureInfo.InvariantCulture));
+			oConfig.Save(ConfigurationSaveMode.Modified, true);
+			ConfigurationManager.RefreshSection("appSettings");
 		}
 
 		private void SaveButton_Click(object sender, EventArgs e)
