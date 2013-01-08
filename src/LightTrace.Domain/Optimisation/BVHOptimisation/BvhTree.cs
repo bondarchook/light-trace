@@ -1,5 +1,8 @@
+using System;
 using System.Collections.Generic;
+using System.Text;
 using LightTrace.Domain.GeomertryPrimitives;
+using LightTrace.Domain.Optimisation.OctTreeOptimisation;
 using Microsoft.Xna.Framework;
 using System.Linq;
 
@@ -8,6 +11,12 @@ namespace LightTrace.Domain.Optimisation.BVHOptimisation
 	public class BvhTree
 	{
 		private BvhNode _root;
+
+        private int _minCount = int.MaxValue;
+        private int _maxCount = int.MinValue;
+        private int _totalCount;
+        private int _avrCount;
+        private int _leafCount;
 
 		public BvhTree(BvhNode root)
 		{
@@ -32,6 +41,21 @@ namespace LightTrace.Domain.Optimisation.BVHOptimisation
 //			return result.Sum(range => range.LongLength);
 			return result.Count;
 		}
+
+        public string GetStatistics()
+        {
+            CalculateStatistic(_root);
+
+            StringBuilder builder = new StringBuilder();
+            builder.AppendLine(string.Format("Min count in leaf = {0}", _minCount));
+            builder.AppendLine(string.Format("Max count in leaf = {0}", _maxCount));
+            builder.AppendLine(string.Format("Avr count in leaf = {0}", _avrCount));
+            builder.AppendLine(string.Format("Total count in leaf = {0}", _totalCount));
+            builder.AppendLine(string.Format("Leaf count = {0}", _leafCount));
+
+            return builder.ToString();
+        }
+
 
 		private void GetObjects(Ray ray, BvhNode node, List<Intersectable[]> result)
 		{
@@ -87,5 +111,24 @@ namespace LightTrace.Domain.Optimisation.BVHOptimisation
 				}
 			}
 		}
+
+	    public void CalculateStatistic(BvhNode node)
+	    {
+	        if (node.IsLeaf)
+	        {
+	            _minCount = Math.Min(_minCount, node.Objects.Length);
+	            _maxCount = Math.Max(_maxCount, node.Objects.Length);
+	            _totalCount += node.Objects.Length;
+	            _leafCount++;
+	        }
+	        else
+	        {
+	            if (node.Left != null)
+	                CalculateStatistic(node.Left);
+
+	            if (node.Right != null)
+	                CalculateStatistic(node.Right);
+	        }
+	    }
 	}
 }

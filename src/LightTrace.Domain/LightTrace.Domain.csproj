@@ -43,11 +43,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Context.cs" />
     <Compile Include="GeomertryPrimitives\Geomertry.cs" />
     <Compile Include="GeomertryPrimitives\Sphere.cs" />
     <Compile Include="GeomertryPrimitives\Triangle.cs" />
     <Compile Include="Global.cs" />
+    <Compile Include="ILoger.cs" />
     <Compile Include="IntersectionInfo.cs" />
+    <Compile Include="Level.cs" />
     <Compile Include="Nodes\Camera.cs" />
     <Compile Include="Nodes\DirectionalLight.cs" />
     <Compile Include="Nodes\MeshGeometry.cs" />

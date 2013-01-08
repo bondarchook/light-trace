@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using LightTrace.Domain.GeomertryPrimitives;
 using Microsoft.Xna.Framework;
+using RayTracer;
+using RayTracer.UI;
 
 namespace LightTrace.Domain.Optimisation.BVHOptimisation
 {
@@ -12,29 +15,32 @@ namespace LightTrace.Domain.Optimisation.BVHOptimisation
 
 		private int _maxDepth = 4;
 		private int _minObjectsPerLeaf = 2;
-		private Random _random;
+        private readonly ILoger _loger;
 
-		public BvhTree BuildBvhTree(IEnumerable<Geomertry> geomertries, int maxDepth, int minObjPerLeaf)
+	    public BvhTreeBuilder()
+	    {
+            _loger = Context.Instance.Loger;
+	    }
+
+	    public BvhTree BuildBvhTree(IEnumerable<Geomertry> geomertries, int maxDepth, int minObjPerLeaf)
 		{
-			_random = new Random();
 			_maxDepth = maxDepth;
 			_minObjectsPerLeaf = minObjPerLeaf;
 
-			_objects = geomertries.Select(Intersectable.CreateIntersectable).ToArray();
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
 
-//				list.Sort((objA, objB) => objA.Center.AxisValue(axis).CompareTo(objB.Center.AxisValue(axis)));
-//				_centers[axis] = new float[list.Count];
+			_objects = geomertries.Select(Intersectable.CreateIntersectable).ToArray();
 
 			BoundingBox rootBoundingBox = OptimisationUtils.GetBoundingBox(geomertries);
 			BvhNode root = new BvhNode(rootBoundingBox);
 
-			var ax = MaxAxisIndex(rootBoundingBox);
-
 			BuildRecursive(root, _objects, 0);
 
-			Console.WriteLine("{0}", Math.Max(Math.Max(rootBoundingBox.Max.X - rootBoundingBox.Min.X, rootBoundingBox.Max.Y - rootBoundingBox.Min.Y), rootBoundingBox.Max.Z - rootBoundingBox.Min.Z));
+            stopwatch.Stop();
+            _loger.Log(Level.Info, string.Format("BVH tree build time: {0} ms", stopwatch.ElapsedMilliseconds));
 
-			return new BvhTree(root);
+            return new BvhTree(root);
 		}
 
 		private void BuildRecursive(BvhNode node, Intersectable[] objects, int depht)
@@ -101,7 +107,7 @@ namespace LightTrace.Domain.Optimisation.BVHOptimisation
 
 				float min = node.BoundingBox.Min.AxisValue(axis);
 				float max = node.BoundingBox.Max.AxisValue(axis);
-				float step = (max - min)/50;
+				float step = (max - min)/10;
 
 				for (float split = min + step; split < max; split += step)
 				{

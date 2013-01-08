@@ -3,6 +3,7 @@ using System.Linq;
 using LightTrace.Domain;
 using LightTrace.Domain.GeomertryPrimitives;
 using LightTrace.Domain.Nodes;
+using LightTrace.Domain.Optimisation.BVHOptimisation;
 using LightTrace.Domain.Optimisation.OctTreeOptimisation;
 using Microsoft.Xna.Framework;
 
@@ -23,10 +24,14 @@ namespace LightTrace.SimpleSceneReader
 
 			_useOctTree = true;
 
-			OctTreeBuilder builder = new OctTreeBuilder();
 			if (_useOctTree && Geomertries.Any())
 			{
-				_tree = builder.Build(Geomertries, 5, 10);
+//                OctTreeBuilder builder = new OctTreeBuilder();
+//				_tree = builder.Build(Geomertries, 5, 10);
+
+                BvhTreeBuilder bvhTreeBuilder = new BvhTreeBuilder();
+                BvhTree = bvhTreeBuilder.BuildBvhTree(Geomertries, 20, 1);
+
 			}
 		}
 	}

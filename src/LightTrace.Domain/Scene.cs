@@ -27,7 +27,7 @@ namespace LightTrace.Domain
 		public string OutputFileName;
 
 		protected OctTree _tree;
-		protected BvhTree _BvhTree;
+	    public BvhTree BvhTree;
 		protected bool _useOctTree = true;
 
 		public Scene()
@@ -70,7 +70,7 @@ namespace LightTrace.Domain
 //				_tree = builder.Build(Geomertries, 6, 5);
 
 				BvhTreeBuilder bvhTreeBuilder = new BvhTreeBuilder();
-				_BvhTree = bvhTreeBuilder.BuildBvhTree(Geomertries, 36, 1);
+				BvhTree = bvhTreeBuilder.BuildBvhTree(Geomertries, 5, 1);
 			}
 		}
 
@@ -79,7 +79,7 @@ namespace LightTrace.Domain
 			if (_useOctTree)
 			{
 				//IEnumerable<Geomertry> triangles = _tree.GetPotencialObjects(ray);
-				IEnumerable<Geomertry> triangles = _BvhTree.GetPotencialObjects(ray);
+				IEnumerable<Geomertry> triangles = BvhTree.GetPotencialObjects(ray);
 				return triangles;
 			}
 			else
@@ -93,7 +93,7 @@ namespace LightTrace.Domain
 			if (_useOctTree)
 			{
 				//IEnumerable<Geomertry> triangles = _tree.GetPotencialObjects(ray);
-				return _BvhTree.GetPotencialObjectsCount(ray);
+				return BvhTree.GetPotencialObjectsCount(ray);
 			}
 			else
 			{

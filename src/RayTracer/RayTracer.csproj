@@ -51,8 +51,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Context.cs" />
-    <Compile Include="UI\ILoger.cs" />
     <Compile Include="UI\MainScreen.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -63,7 +61,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Renderer.cs" />
     <Compile Include="Tracer\RayTracer.cs" />
-    <Compile Include="UI\Level.cs" />
     <Compile Include="UI\ListBoxLog.cs" />
     <Compile Include="Utils.cs">
       <SubType>Code</SubType>
