@@ -7,6 +7,27 @@ namespace LightTrace.Domain.GeomertryPrimitives
 {
 	public class Triangle : Geomertry
 	{
+        public Vector3 A;
+        public Vector3 B;
+        public Vector3 C;
+
+        //Normals
+        public Vector3? Na;
+        public Vector3? Nb;
+        public Vector3? Nc;
+
+        //Texture coordinates
+        public Vector2? Ta;
+        public Vector2? Tb;
+        public Vector2? Tc;
+
+	    private Vector3 _normal;
+	    private Vector3 _cb;
+	    private Vector3 _ac;
+	    private Vector3 _ba;
+	    private float _dotAn;
+	    private float _det;
+
 		public Triangle()
 		{
 		}
@@ -16,28 +37,22 @@ namespace LightTrace.Domain.GeomertryPrimitives
 			A = a;
 			B = b;
 			C = c;
+            Prepare();
 		}
 
-		public Vector3 A;
-		public Vector3 B;
-		public Vector3 C;
-
-		//Normals
-		public Vector3? Na;
-		public Vector3? Nb;
-		public Vector3? Nc;
-
-		//Texture coordinates
-		public Vector2? Ta;
-		public Vector2? Tb;
-		public Vector2? Tc;
+	    public void Prepare()
+	    {
+            _normal = Vector3.Cross((B - A), (C - A));
+	        _dotAn = Vector4.Dot(A.ToV4(), _normal.ToV4());
+	        _det = Vector3.Dot(_normal, _normal);
+	        _cb = C - B;
+	        _ac = A - C;
+	        _ba = B - A;
+	    }
 
 		public override IntersectionInfo Intersect(Ray ray)
 		{
-			Vector3 loaclN = Vector3.Cross((B - A), (C - A));
-
-			Vector4 a = A.ToV4();
-			Vector4 n = loaclN.ToV4();
+            Vector4 n = _normal.ToV4();
 
 			Ray4 localRay = TransformToLocalRay(ray);
 
@@ -45,57 +60,52 @@ namespace LightTrace.Domain.GeomertryPrimitives
 
 			if (Math.Abs(nd - 0) > Global.Epsilon) // nd != 0
 			{
-				float intDistance = (Vector4.Dot(a, n) - Vector4.Dot(localRay.Position, n))/nd;
+				float intDistance = (_dotAn - Vector4.Dot(localRay.Position, n))/nd;
 
 				if (intDistance < 0.0001)
 				{
 					return null;
 				}
 
-				Vector4 q = localRay.Position + localRay.Direction*intDistance;
-				Vector3 qq = q.ToV3();
+                Vector3 point = (localRay.Position + localRay.Direction * intDistance).ToV3();
 
-				float dot = Vector3.Dot(Vector3.Cross((B - A), (C - A)), loaclN);
-
-				float alfa = Vector3.Dot(Vector3.Cross((C - B), (qq - B)), loaclN)/dot;
-				float beta = Vector3.Dot(Vector3.Cross((A - C), (qq - C)), loaclN)/dot;
-				float gamma = Vector3.Dot(Vector3.Cross((B - A), (qq - A)), loaclN)/dot;
+                float alfa = Vector3.Dot(Vector3.Cross(_cb, (point - B)), _normal) / _det;
+                float beta = Vector3.Dot(Vector3.Cross(_ac, (point - C)), _normal) / _det;
+                float gamma = Vector3.Dot(Vector3.Cross(_ba, (point - A)), _normal) / _det;
 
 				Vector3 barycentricCoordinates = new Vector3(alfa, beta, gamma);
 
 				if (alfa >= 0 && beta >= 0 && gamma >= 0)
-					return CreateIntersection(intDistance, localRay, loaclN, barycentricCoordinates);
+                    return new IntersectionInfo(intDistance, localRay, barycentricCoordinates, this);
 			}
 
 			return null;
 		}
 
-		private IntersectionInfo CreateIntersection(float intDistance, Ray4 localRay, Vector3 loaclN, Vector3 baryCoord)
+        public override void CalculateIntersection(IntersectionInfo info)
 		{
-			var intersectionInfo = new IntersectionInfo(intDistance, this);
-
-			Vector4 point = localRay.Position + localRay.Direction*intDistance;
+		    Ray4 localRay = info.LocalRay;
+		    Vector4 point = localRay.Position + localRay.Direction * info.Distance;
+            Vector3 baryCoord = info.BaryCoord;
 
 			if (UseNormals())
 			{
-				Vector3 n = Na.Value*baryCoord.X + Nb.Value*baryCoord.Y + Nc.Value*baryCoord.Z;
-				intersectionInfo.Normal = TransformNormalToCameraCoords(n);
+			    Vector3 n = Na.Value * baryCoord.X + Nb.Value * baryCoord.Y + Nc.Value * baryCoord.Z;
+				info.Normal = TransformNormalToCameraCoords(n);
 			}
 			else
 			{
-				intersectionInfo.Normal = TransformNormalToCameraCoords(loaclN);
+				info.Normal = TransformNormalToCameraCoords(_normal);
 			}
 
 			if (UseTexture())
 			{
 				Vector2 coord = Ta.Value*baryCoord.X+Tb.Value*baryCoord.Y+Tc.Value*baryCoord.Z;
-				intersectionInfo.TexCoord = coord;
+				info.TexCoord = coord;
 			}
 
 			point = TransformPointToCameraCoords(point);
-			intersectionInfo.IntersectionPoint = point.ToV3();
-
-			return intersectionInfo;
+			info.IntersectionPoint = point.ToV3();
 		}
 
 		private bool UseNormals()

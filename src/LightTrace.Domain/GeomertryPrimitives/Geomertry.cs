@@ -10,6 +10,7 @@ namespace LightTrace.Domain.GeomertryPrimitives
 		public Material Material { get; set; }
 
 		public abstract IntersectionInfo Intersect(Ray ray);
+	    public abstract void CalculateIntersection(IntersectionInfo info);
 
 		protected Ray4 TransformToLocalRay(Ray ray)
 		{

@@ -62,6 +62,8 @@ namespace RayTracer.Tracer
 			{
 				//return new Vector3(intersection.TexCoord.X, intersection.TexCoord.Y, 0.5f);
 
+                intersection.Calculate();
+
 				Vector3 surfaceColor = CalculateSurfaceColor(intersection, ray);
 
 				Material material = intersection.Geomertry.Material;

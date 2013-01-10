@@ -60,6 +60,7 @@ namespace LightTrace.Domain
 				foreach (var triangle in geometry.Triangles)
 				{
 					triangle.Transform = geometry.Scale*geometry.Rotation*geometry.Translation;
+                    triangle.Prepare();
 
 					Geomertries.Add(triangle);
 				}

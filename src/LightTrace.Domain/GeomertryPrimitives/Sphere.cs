@@ -73,23 +73,20 @@ namespace LightTrace.Domain.GeomertryPrimitives
 				}
 			}
 
-			return CreateIntersection(intDist, localRay, center);
+			return new IntersectionInfo(intDist, localRay, this);
 		}
 
-		private IntersectionInfo CreateIntersection(float intDistance, Ray4 ray, Vector4 center)
+	    public override void CalculateIntersection(IntersectionInfo info)
 		{
-			var intersectionInfo = new IntersectionInfo(intDistance, this);
+            Ray4 localRay = info.LocalRay;
+            Vector4 point = localRay.Position + localRay.Direction * info.Distance;
 
-			Vector4 point = ray.Position + ray.Direction*intDistance;
-
-			Vector3 normal = point.ToV3() - center.ToV3();
-			intersectionInfo.Normal = TransformNormalToCameraCoords(normal);
+			Vector3 normal = point.ToV3() - Center;
+			info.Normal = TransformNormalToCameraCoords(normal);
 
 			point = TransformPointToCameraCoords(point);
 
-			intersectionInfo.IntersectionPoint = point.ToV3();
-
-			return intersectionInfo;
+			info.IntersectionPoint = point.ToV3();
 		}
 	}
 }
