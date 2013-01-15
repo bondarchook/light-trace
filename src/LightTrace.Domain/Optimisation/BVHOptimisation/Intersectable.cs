@@ -19,6 +19,10 @@ namespace LightTrace.Domain.Optimisation.BVHOptimisation
 		{
 			if (geomertry is Triangle)
 				return new TriangeIntersectable((Triangle) geomertry);
+			else if (geomertry is CalculatedTriangle)
+			{
+				return new CalculatedTriangeIntersectable((CalculatedTriangle) geomertry);
+			}
 			else if (geomertry is Sphere)
 			{
 				return new SphereIntersectable((Sphere) geomertry);

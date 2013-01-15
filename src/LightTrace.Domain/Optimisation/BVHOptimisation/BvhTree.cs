@@ -103,16 +103,18 @@ namespace LightTrace.Domain.Optimisation.BVHOptimisation
 
 		private IEnumerable<Geomertry> CreateEnumerable(List<Intersectable[]> ranges)
 		{
-			foreach (Intersectable[] range in ranges)
-			{
-				for (long i = 0; i < range.LongLength; i++)
-				{
-					yield return range[i].Geomertry;
-				}
-			}
+			return from range in ranges from intersectable in range select intersectable.Geomertry;
+
+			//			foreach (Intersectable[] range in ranges)
+//			{
+//				for (long i = 0; i < range.LongLength; i++)
+//				{
+//					yield return range[i].Geomertry;
+//				}
+//			}
 		}
 
-	    public void CalculateStatistic(BvhNode node)
+		public void CalculateStatistic(BvhNode node)
 	    {
 	        if (node.IsLeaf)
 	        {

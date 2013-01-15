@@ -46,6 +46,7 @@
   <ItemGroup>
     <Compile Include="Benchmark\IntersecionBenchmark.cs" />
     <Compile Include="Context.cs" />
+    <Compile Include="GeomertryPrimitives\CalculatedTriangle.cs" />
     <Compile Include="GeomertryPrimitives\Geomertry.cs" />
     <Compile Include="GeomertryPrimitives\Sphere.cs" />
     <Compile Include="GeomertryPrimitives\Triangle.cs" />
@@ -63,6 +64,7 @@
     <Compile Include="Optimisation\BVHOptimisation\BvhNode.cs" />
     <Compile Include="Optimisation\BVHOptimisation\BvhTree.cs" />
     <Compile Include="Optimisation\BVHOptimisation\BvhTreeBuilder.cs" />
+    <Compile Include="Optimisation\BVHOptimisation\CalculatedTriangeIntersectable.cs" />
     <Compile Include="Optimisation\BVHOptimisation\Intersectable.cs" />
     <Compile Include="Optimisation\BVHOptimisation\Range.cs" />
     <Compile Include="Optimisation\BVHOptimisation\SphereIntersectable.cs" />

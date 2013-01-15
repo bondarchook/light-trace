@@ -36,7 +36,7 @@ namespace RayTracer
 			_scene = scene;
 			_scene.PrepareScene();
 
-			_loger.Log(Level.Verbose, _scene.BvhTree.GetStatistics());
+			//_loger.Log(Level.Verbose, _scene.BvhTree.GetStatistics());
 
 			_pictureBox = pictureBox;
 

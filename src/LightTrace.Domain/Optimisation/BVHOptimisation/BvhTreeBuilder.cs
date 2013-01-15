@@ -37,7 +37,8 @@ namespace LightTrace.Domain.Optimisation.BVHOptimisation
 
 			_objects = geomertries.Select(Intersectable.CreateIntersectable).ToArray();
 
-			BoundingBox rootBoundingBox = OptimisationUtils.GetBoundingBox(geomertries);
+//			BoundingBox rootBoundingBox = OptimisationUtils.GetBoundingBox(geomertries);
+			BoundingBox rootBoundingBox = CalculateBoundingBox(_objects);
 			BvhNode root = new BvhNode(rootBoundingBox);
 
 			BuildRecursive(root, _objects, 0);

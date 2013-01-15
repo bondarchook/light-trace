@@ -22,6 +22,11 @@ namespace LightTrace.SimpleSceneReader
 		{
 			Camera.PrepareCamera();
 
+			foreach (Geomertry triangle in Geomertries)
+			{
+				triangle.Prepare();
+			}
+
 			UseOptimisation = true;
 
 			if (UseOptimisation && Geomertries.Any())

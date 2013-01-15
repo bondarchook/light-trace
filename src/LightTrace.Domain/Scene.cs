@@ -57,7 +57,7 @@ namespace LightTrace.Domain
 
 			foreach (var geometry in Nodes.OfType<MeshGeometry>())
 			{
-				foreach (var triangle in geometry.Triangles)
+				foreach (Triangle triangle in geometry.Triangles)
 				{
 					triangle.Transform = geometry.Scale*geometry.Rotation*geometry.Translation;
                     triangle.Prepare();

@@ -40,8 +40,10 @@ namespace LightTrace.Domain.GeomertryPrimitives
             Prepare();
 		}
 
-	    public void Prepare()
+	    public override void Prepare()
 	    {
+			base.Prepare();
+
             _normal = Vector3.Cross((B - A), (C - A));
 	        _dotAn = Vector4.Dot(A.ToV4(), _normal.ToV4());
 	        _det = Vector3.Dot(_normal, _normal);

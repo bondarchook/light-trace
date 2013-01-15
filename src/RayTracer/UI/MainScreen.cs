@@ -15,6 +15,7 @@ namespace RayTracer.UI
 	public partial class MainForm : Form
 	{
 		private Renderer _renderer;
+		private IntersecionBenchmark _benchmark = new IntersecionBenchmark();
 
 		public MainForm()
 		{
@@ -25,6 +26,8 @@ namespace RayTracer.UI
 		{
 			Task task = new Task(() => _renderer.Render());
 			task.Start();
+
+			//_benchmark.TriangleIntersect();
 		}
 
 		private void ExitButton_Click(object sender, EventArgs e)
@@ -36,14 +39,16 @@ namespace RayTracer.UI
 		{
 			Context.Instance.Loger = new ListBoxLog(LogListBox);
 
+			//_benchmark.Generate(1000000);
+
 			Benchmark();
 
 			SceneReader reader = new SceneReader();
 //			Scene scene = reader.LoadScene(@"g:\X-Files\Dropbox\Dropbox\3D_course\hw3-submissionscenes.a13d1de57b76\hw3-submissionscenes\test.test");
 //			LightTrace.Domain.Scene scene = reader.LoadScene(@"g:\X-Files\Dropbox\Dropbox\3D_course\hw3-submissionscenes.a13d1de57b76\hw3-submissionscenes\scene4-ambient.test");
 //			LightTrace.Domain.Scene scene = reader.LoadScene(@"g:\X-Files\Dropbox\Dropbox\3D_course\hw3-submissionscenes.a13d1de57b76\hw3-submissionscenes\scene4-specular.test");
-//			Scene scene = reader.LoadScene(@"g:\X-Files\Dropbox\Dropbox\3D_course\hw3-submissionscenes.a13d1de57b76\hw3-submissionscenes\scene7.test");
-            Scene scene = reader.LoadScene(@"d:\tmp\scene7.test");
+			Scene scene = reader.LoadScene(@"g:\X-Files\Dropbox\Dropbox\3D_course\hw3-submissionscenes.a13d1de57b76\hw3-submissionscenes\scene7.test");
+//            Scene scene = reader.LoadScene(@"d:\tmp\scene7.test");
 
 //			scene.Width = 160;
 //			scene.Height = 120;
@@ -61,8 +66,9 @@ namespace RayTracer.UI
 			IntersecionBenchmark benchmark = new IntersecionBenchmark();
 			
 			var count = 100000;
-			float triangleIntersect = benchmark.TriangleIntersect(count);
-			float boundingBoxIntersect = benchmark.BoundingBoxIntersect(count);
+			benchmark.Generate(count);
+			float triangleIntersect = benchmark.TriangleIntersect();
+			float boundingBoxIntersect = benchmark.BoundingBoxIntersect();
 
 			Configuration oConfig = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
 

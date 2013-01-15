@@ -7,8 +7,8 @@ namespace LightTrace.Domain.GeomertryPrimitives
 {
 	public class Sphere : Geomertry
 	{
-		public float Radius { get; set; }
-		public Vector3 Center { get; set; }
+		public float Radius;
+		public Vector3 Center;
 
 		public Sphere()
 		{

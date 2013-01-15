@@ -116,10 +116,14 @@ namespace LightTrace.SimpleSceneReader
 					}
 				case "tri":
 					{
-						Triangle triangle = new Triangle(_vertices[tokens.ToInt(1)], _vertices[tokens.ToInt(2)], _vertices[tokens.ToInt(3)])
+//						Triangle triangle = new Triangle(_vertices[tokens.ToInt(1)], _vertices[tokens.ToInt(2)], _vertices[tokens.ToInt(3)])
+//						                    	{
+//						                    		Material = (Material) _material.Clone(),
+//						                    		Transform = _transforms.Peek()
+//						                    	};
+						CalculatedTriangle triangle = new CalculatedTriangle(_vertices[tokens.ToInt(1)], _vertices[tokens.ToInt(2)], _vertices[tokens.ToInt(3)],_transforms.Peek())
 						                    	{
-						                    		Material = (Material) _material.Clone(),
-						                    		Transform = _transforms.Peek()
+						                    		Material = (Material) _material.Clone()
 						                    	};
 
 						_scene.Geomertries.Add(triangle);
